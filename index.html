@@ -13,7 +13,7 @@
       so you can click through it freely. (Pressing → on the demo's start
       screen starts the demo; ← there goes back a slide.)
     • When the demo reaches its final "first look at your website" screen,
-      the slideshow keys work again (or click "Continue presentation").
+      the slideshow keys work again (or click "Build my site").
     • The demo resets to its start screen every time you arrive on its slide.
     • Escape during the demo = bail out and jump to the next slide.
 
@@ -79,7 +79,7 @@
 html, body { height: 100%; margin: 0; }
 body {
   overflow: hidden;
-  background: #e9e9e9;               /* letterbox color around the canvas */
+  background: #000;                  /* letterbox color around the canvas */
   color: var(--ink);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
@@ -909,7 +909,7 @@ window.FormaDemo = (() => {
           <div class="footer-actions">
             <button class="restart-button" type="button" data-action="restart">Start over <span aria-hidden="true">↺</span></button>
             <!-- Hands control back to the slideshow -->
-            <button class="primary-button" type="button" data-action="continue">Continue presentation <span class="arrow" aria-hidden="true">→</span></button>
+            <button class="primary-button" type="button" data-action="continue">Build my site <span class="arrow" aria-hidden="true">→</span></button>
           </div>
         </div>
       </section>`;
