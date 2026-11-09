@@ -1,30 +1,27 @@
 <!doctype html>
 <!--
   ============================================================================
-  FORMA — PRESENTATION + LIVE DEMO
+  STASO — PRESENTATION + LIVE DEMO
   ============================================================================
   One HTML file that runs the IF-P3 Figma slides as a slideshow, with the
-  interactive Forma demo embedded on the "Demo" slide.
+  live staso web app embedded on the "Demo" slide.
 
   HOW IT BEHAVES
-    • Every slide except the demo: normal slideshow. → / Space / PageDown / click = next,
-      ← / PageUp = back. F = fullscreen. Home / End = first / last slide.
-    • Demo slide: arrow keys stop changing slides while the demo is running,
-      so you can click through it freely. (Pressing → on the demo's start
-      screen starts the demo; ← there goes back a slide.)
-    • When the demo reaches its final "first look at your website" screen,
-      the slideshow keys work again (or click "Build my site").
-    • The demo resets to its start screen every time you arrive on its slide.
-    • Escape during the demo = bail out and jump to the next slide.
+    • → / Space / PageDown / click = next, ← / PageUp = back.
+      F = fullscreen. Home / End = first / last slide.
+    • Demo slide: shows the live site (https://ai-prompts-you-webapp.replit.app/)
+      in a frame. Arrow keys still move between slides. Clicking into the
+      site hands it the keyboard; move the mouse off the site and the arrow
+      keys drive the slides again.
+    • The site reloads to its start page every time you arrive on its slide.
 
   FILE LAYOUT (search for these headings)
     1. DESIGN TOKENS        – colors, fonts, demo size. Change brand here.
     2. DECK + SLIDE CHROME  – stage scaling, header, logo, nav controls
     3. SLIDE STYLES         – one block per slide
-    4. DEMO STYLES          – everything inside the demo panel
+    4. DEMO STYLES          – the framed live-site panel
     5. SLIDE MARKUP         – the slides themselves (in order)
-    6. DEMO SCRIPT          – the walkthrough logic
-    7. DECK SCRIPT          – slideshow navigation + demo lock
+    6. DECK SCRIPT          – slideshow navigation
 
   ASSETS live in ./assets (photo, background, line icons). Keep that folder
   next to this file.
@@ -37,12 +34,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Forma</title>
-  <!-- Favicon = the same Forma mark used everywhere else -->
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='14' fill='%2317156f'/%3E%3Crect x='12' y='12' width='16' height='4.5' rx='2.25' fill='%23f4f3ff'/%3E%3Crect x='12' y='19.5' width='10' height='4.5' rx='2.25' fill='%23b5b4de'/%3E%3C/svg%3E">
+  <title>staso</title>
+  <!-- Favicon = the same staso mark used everywhere else -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 158 158'%3E%3Crect width='158' height='158' rx='16' fill='%239cc3ec'/%3E%3Cpath transform='translate(78.4 73.6) rotate(43.25) translate(-59.218 -63.155)' fill='%23000456' d='M102.789 40.7525C101.826 41.2292 101.023 41.4675 100.381 41.4675C99.258 41.4675 98.2148 40.9114 97.2519 39.7993C90.0303 30.7431 82.4876 24.388 74.624 20.7337C66.7604 17.0795 59.9399 15.2524 54.1626 15.2524C49.9901 15.2524 46.1385 16.1262 42.6079 17.8739C39.0773 19.6216 37.312 22.7992 37.312 27.4067C37.312 30.902 38.5959 33.8413 41.1636 36.2245C43.8918 38.4488 47.3421 40.2759 51.5146 41.7058C55.6872 43.1357 59.9399 44.4067 64.2729 45.5189C70.5317 46.9488 76.7905 48.617 83.0493 50.5236C89.4686 52.4301 95.3262 54.9722 100.622 58.1498C105.918 61.1685 110.171 64.9816 113.38 69.5891C116.75 74.1966 118.436 79.9957 118.436 86.9864C118.436 94.4537 116.349 101.127 112.177 107.005C108.165 112.884 102.387 117.571 94.8447 121.066C87.3021 124.402 78.3151 126.071 67.8838 126.071C62.9088 126.071 58.0141 125.435 53.1997 124.164C48.5457 123.052 44.1325 121.543 39.96 119.636C38.9971 119.159 38.2749 118.921 37.7935 118.921C36.6701 118.921 36.1084 119.477 36.1084 120.589C36.1084 120.907 36.2689 121.543 36.5898 122.496C36.9108 123.449 37.0713 124.085 37.0713 124.402C37.0713 125.673 36.1084 126.309 34.1826 126.309H25.5166C23.7513 126.309 22.3872 125.515 21.4243 123.926L0.722168 85.5565C0.240723 84.6032 0 83.8882 0 83.4116C0 82.2994 0.641927 81.3462 1.92578 80.5518L9.38818 76.262C10.3511 75.7854 11.0732 75.5471 11.5547 75.5471C12.5176 75.5471 13.4002 76.262 14.2026 77.6919C22.0662 89.2901 30.652 97.5518 39.96 102.477C49.4284 107.402 59.0573 109.865 68.8467 109.865C84.2529 109.865 91.956 105.337 91.956 96.2808C91.956 92.15 90.0303 88.7341 86.1787 86.0331C82.4876 83.3322 77.8336 81.1078 72.2168 79.3602C66.7604 77.6125 61.2238 76.1031 55.6069 74.8321C45.3361 72.29 37.1515 69.4302 31.0532 66.2526C24.9549 62.9162 20.3812 59.4208 17.332 55.7666C14.2829 51.9535 12.1966 48.2199 11.0732 44.5656C10.1104 40.7525 9.62891 37.0983 9.62891 33.603C9.62891 24.0702 13.32 16.2057 20.7021 10.0094C28.0843 3.8131 38.1144 0.714962 50.7925 0.714962C58.3351 0.714962 64.9951 1.74768 70.7724 3.81311C76.5498 5.71965 80.5618 7.30844 82.8086 8.57948C83.4505 8.89724 83.932 9.05612 84.2529 9.05612C84.7344 9.05612 84.9751 8.73836 84.9751 8.10284C84.9751 7.62621 84.7344 6.67293 84.2529 5.24302C84.0924 4.44862 83.932 3.89254 83.7715 3.57478C83.7715 3.09815 83.7715 2.70095 83.7715 2.38319C83.7715 0.794395 84.8146 0 86.9009 0H93.1597C95.2459 0 96.61 0.873839 97.2519 2.62152L109.288 32.888C109.77 33.8413 110.01 34.6357 110.01 35.2712C110.01 36.3833 109.368 37.2572 108.084 37.8927L102.789 40.7525Z'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400&family=Young+Serif&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
 /* ============================================================================
@@ -50,24 +47,24 @@
    Pulled from the Figma file. Edit these to restyle slides AND demo at once.
    ========================================================================== */
 :root {
-  --navy: #17156f;         /* brand / logo / emphasis text */
+  --navy: #000456;         /* brand navy (the "S") / emphasis text */
+  --sky: #9cc3ec;          /* brand light blue (logo square) */
   --ink: #1b1e3a;          /* headlines */
   --muted: #555c79;        /* body copy */
   --label: #55579c;        /* small mono labels */
   --rule: #bdc5de;         /* hairlines */
   --peach: #e7ae94;        /* underline accent */
-  --mark-light: #f4f3ff;   /* logo upper bar */
-  --mark-lavender: #b5b4de;/* logo lower bar */
   --panel: rgba(249, 250, 253, .96); /* white cards on slides */
   --check: #2cb67d;        /* ✓ on light columns */
-  --check-on-navy: #6deabc;/* ✓ on the Forma column */
+  --check-on-navy: #6deabc;/* ✓ on the staso column */
   --dash: #9ba3be;         /* – in table */
 
   --font-sans: "Inter", system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  --font-serif: "Young Serif", Georgia, serif;   /* staso wordmark */
 
-  /* How large the demo renders inside its slide. Raise to make demo text
-     bigger (it will scroll sooner); lower to fit more on screen. */
+  /* How large the embedded demo site renders inside its slide. Raise to make
+     the site's text bigger; lower to fit more of the site on screen. */
   --demo-zoom: 1.3;
 }
 
@@ -115,17 +112,17 @@ body {
 }
 
 /* ---- THE LOGO (one component used everywhere) ---------------------------
-   Usage:  <span class="logo"><svg class="logo-mark"><use href="#forma-mark"/></svg><span class="logo-word">forma</span></span>
-   Size it by setting font-size on .logo — the mark is always 1.25× the text,
-   matching the 40px mark / 32px wordmark in the Figma header. */
+   Usage:  <span class="logo"><span class="logo-word">staso</span><svg class="logo-mark"><use href="#staso-mark"/></svg></span>
+   Size it by setting font-size on .logo. Proportions follow the Figma lockup:
+   128px Young Serif wordmark, 158px mark, ~80px gap. */
 .logo {
-  display: inline-flex; align-items: center; gap: .44em;
-  color: var(--navy);
-  font: 700 1em/1 var(--font-sans);
-  letter-spacing: -.0375em;
+  display: inline-flex; align-items: center; gap: .62em;
+  color: var(--ink);
+  font: 400 1em/1 var(--font-serif);
   white-space: nowrap;
 }
-.logo-mark { width: 1.25em; height: 1.25em; flex: none; }
+.logo-word { transform: translateY(-.04em); } /* optical centering vs. the mark */
+.logo-mark { width: 1.23em; height: 1.23em; flex: none; }
 .s-header .logo { font-size: 32px; }
 
 /* Shared type styles for slide text */
@@ -149,8 +146,6 @@ body {
 .slide.is-active .anim { animation: build-in .7s cubic-bezier(.2,.7,.2,1) var(--d, 0ms) forwards; }
 @keyframes build-in { to { opacity: 1; transform: none; } }
 /* Underlines draw from left to right instead */
-.slide.is-active .s-underline.anim { transform: scaleX(0); transform-origin: left; animation-name: draw-line; }
-@keyframes draw-line { from { opacity: 1; transform: scaleX(0); } to { opacity: 1; transform: scaleX(1); } }
 
 /* Bottom-right slide controls — appear when the mouse moves. */
 .deck-nav {
@@ -171,13 +166,10 @@ body.show-nav .deck-nav { opacity: 1; }
 }
 .deck-nav button:hover:not(:disabled) { background: #e3e6f1; }
 .deck-nav button:disabled { opacity: .35; cursor: default; }
-.deck-nav .lock { display: none; padding: 0 4px; }
-body.demo-locked .deck-nav .lock { display: inline; } /* "demo running" hint */
 
 @media (prefers-reduced-motion: reduce) {
   .slide, .slide.is-active { transition: none; }
   .anim, .slide.is-active .anim { animation: none; opacity: 1; transform: none; }
-  .s-reversal .em::after, .slide.is-active .s-reversal .em::after { animation: none; transform: none; }
 }
 
 /* ============================================================================
@@ -214,9 +206,7 @@ body.demo-locked .deck-nav .lock { display: inline; } /* "demo running" hint */
   content: ""; position: absolute; z-index: -1;
   left: 0; right: 0; bottom: -3px; height: 18px;
   border-radius: 9px; background: var(--peach);
-  transform: scaleX(0); transform-origin: left;
 }
-.slide.is-active .s-reversal .em::after { animation: draw-line .7s cubic-bezier(.2,.7,.2,1) 900ms forwards; }
 
 /* -- Slides 4–7: the blank prompt ---------------------------------------------- */
 .s-prompt {
@@ -242,7 +232,21 @@ body.demo-locked .deck-nav .lock { display: inline; } /* "demo running" hint */
 
 /* -- Slide 8: who we serve ----------------------------------------------------- */
 .s-serve-title { top: 172px; font-size: 67px; line-height: 1.15; letter-spacing: -.04em; }
-.s-icon { position: absolute; }
+.s-serve-grid {
+  position: absolute; left: 96px; right: 96px; top: 400px;
+  display: grid; grid-template-columns: repeat(4, 1fr); row-gap: 44px;
+}
+.s-serve-item {
+  display: flex; flex-direction: column; align-items: center; gap: 18px;
+  font: 500 28px/1.2 var(--font-sans); color: var(--ink);
+}
+/* White disc behind each icon — same treatment as the slide 9 circles */
+.s-disc {
+  width: 190px; height: 190px; border-radius: 50%;
+  display: grid; place-items: center;
+  background: var(--panel);
+}
+.s-disc img { width: 120px; height: 120px; }
 
 /* -- Slide 9: verticals -------------------------------------------------------- */
 .s-step { position: absolute; top: 400px; width: 360px; text-align: center; }
@@ -252,8 +256,8 @@ body.demo-locked .deck-nav .lock { display: inline; } /* "demo running" hint */
   display: grid; place-items: center;
   border-radius: 50%;
   background: var(--panel);
-  font-size: 150px; line-height: 1;
 }
+.s-circle img { width: 200px; height: 200px; }
 .s-arrow { position: absolute; top: 594px; font-size: 80px; line-height: 1; color: #000; }
 .s-tagline { position: absolute; left: 96px; top: 955px; margin: 0; font: 500 37px/1.18 var(--font-sans); color: var(--ink); }
 
@@ -269,19 +273,19 @@ body.demo-locked .deck-nav .lock { display: inline; } /* "demo running" hint */
 .s-table .row-label { font: 500 22px/1.3 var(--font-sans); color: var(--ink); }
 /* Column backgrounds */
 .s-table .c-light { background: var(--panel); justify-content: center; border-left: 1px solid rgb(255 255 255 / .8); }
-.s-table .c-forma { background: var(--navy); justify-content: center; }
+.s-table .c-brand { background: var(--navy); justify-content: center; }
 /* Header cells */
 .s-table .head { flex-direction: column; align-items: flex-start; justify-content: center; padding-left: 31px; border-radius: 20px 20px 0 0; }
 .s-table .head strong { font: 700 26px/1.18 var(--font-sans); color: var(--ink); }
 .s-table .head small { margin-top: 2px; font: 400 16px var(--font-sans); color: var(--muted); }
-.s-table .c-forma.head strong { color: #fff; }
-.s-table .c-forma.head small { color: #e1e3f7; }
+.s-table .c-brand.head strong { color: #fff; }
+.s-table .c-brand.head small { color: #e1e3f7; }
 /* Bottom caps */
 .s-table .cap { border-bottom: 0; border-radius: 0 0 20px 20px; }
 .s-table .blank { border-bottom: 0; }
 /* Marks */
 .s-table .yes { color: var(--check); font: 700 36px var(--font-sans); }
-.s-table .c-forma .yes { color: var(--check-on-navy); }
+.s-table .c-brand .yes { color: var(--check-on-navy); }
 .s-table .no { color: var(--dash); font: 500 36px var(--font-sans); }
 .s-legend { position: absolute; left: 96px; top: 974px; font: 15px var(--font-mono); letter-spacing: .5px; color: var(--label); opacity: .75; white-space: pre; }
 
@@ -291,244 +295,52 @@ body.demo-locked .deck-nav .lock { display: inline; } /* "demo running" hint */
 /* -- Slide 12: closing --------------------------------------------------------- */
 .s-close-1 { top: 225px; font-size: 88px; line-height: 1.17; }
 .s-close-2 { top: 495px; font-size: 110px; line-height: 1.19; color: var(--navy); }
+/* Peach underline under "what to ask." — sized to the words, and it only
+   fades in after the line has appeared. Raise `bottom` to move it up. */
+.s-close-ul { position: relative; display: inline-block; }
+.s-close-ul::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 4px; height: 14px;
+  border-radius: 7px; background: var(--peach); opacity: 0;
+}
+.slide.is-active .s-close-ul::after { animation: ul-in .5s ease 1.4s forwards; }
+@keyframes ul-in { to { opacity: 1; } }
 .s-close-note { position: absolute; left: 96px; top: 875px; margin: 0; font: 400 30px var(--font-sans); color: var(--muted); }
 
 /* ============================================================================
    4. DEMO STYLES
-   Everything below lives inside the demo panel on the Demo slide.
-   Uses the shared tokens above plus a few demo-only tints.
+   The Demo slide shows the live web app in an <iframe>. Change the address in
+   the SLIDE MARKUP (search "DEMO_URL") to point the demo somewhere else.
    ========================================================================== */
 .demo {
-  /* demo-only palette */
-  --paper: #eef0f7;
-  --paper-deep: #e3e6f1;
-  --card: #f9fafd;
-  --line: #d9ddeb;
-  --tint: #dbe4fb;       /* light blue illustration fill */
-  --tint-2: #c9d6f6;     /* slightly deeper blue */
-  --tint-soft: #eaf0fd;  /* selected rows / alt backgrounds */
-  --art-line: #7d84c9;   /* outline strokes in illustrations */
-  --art-fill: #a9b0e3;
-  --navy-hover: #24228f;
-
   /* Panel position on the 1920×1080 slide */
   position: absolute; left: 96px; top: 250px;
   width: 1728px; height: 790px;
   overflow: hidden;
   border: 1px solid rgb(255 255 255 / .85);
   border-radius: 24px;
-  background: rgb(249 250 253 / .55);
-  box-shadow: 0 30px 60px -40px rgb(23 21 111 / .35);
+  background: #fff;
+  box-shadow: 0 30px 60px -40px rgb(0 4 86 / .35);
 }
-/* Inner wrapper is zoomed so the demo reads at presentation size */
-.demo-app {
-  zoom: var(--demo-zoom);
-  height: 100%;
-  display: flex; flex-direction: column;
-  color: var(--ink);
-  font-family: var(--font-sans);
+/* The site renders inside a virtual window --demo-zoom times smaller and is
+   then scaled back up, so its text reads at presentation size. */
+.demo iframe {
+  width: calc(100% / var(--demo-zoom)); height: calc(100% / var(--demo-zoom));
+  border: 0; display: block;
+  transform: scale(var(--demo-zoom)); transform-origin: 0 0;
 }
-/* :where() keeps these resets at zero specificity so button classes below win */
-.demo :where(button, input, textarea) { font: inherit; }
-.demo :where(button) { color: inherit; }
-.demo button:focus-visible, .demo input:focus-visible, .demo textarea:focus-visible { outline: 3px solid #4744c4; outline-offset: 3px; }
-
-/* -- Demo toolbar: status text, "Start over", progress bar -- */
-.demo-bar { flex: 0 0 44px; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; background: rgb(249 250 253 / .75); }
-.demo-status { color: var(--label); font: 11px var(--font-mono); letter-spacing: .08em; }
-.progress-track { height: 3px; flex: 0 0 3px; overflow: hidden; background: var(--paper-deep); }
-.progress-fill { width: 100%; height: 100%; transform: scaleX(0); transform-origin: left; background: var(--navy); transition: transform .35s ease; }
-#demo-main { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; outline: none; }
-
-/* -- Buttons -- */
-.primary-button { min-height: 46px; display: inline-flex; align-items: center; justify-content: center; gap: 11px; padding: 0 18px; border: 0; border-radius: 11px; color: var(--card); background: var(--navy); font-size: 13px; font-weight: 600; cursor: pointer; transition: transform .2s, background .2s; }
-.primary-button:hover:not(:disabled) { transform: translateY(-2px); background: var(--navy-hover); }
-.primary-button:disabled { cursor: not-allowed; background: #9ea4c4; }
-.arrow { font-size: 17px; line-height: 0; }
-.quiet-button, .back-button, .review-button, .restart-button { min-height: 38px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 0 10px; border: 0; border-radius: 8px; color: var(--muted); background: transparent; font-size: 12px; cursor: pointer; }
-.back-button, .review-button, .restart-button { border: 1px solid var(--line); background: var(--card); white-space: nowrap; }
-.quiet-button:hover, .back-button:hover, .review-button:hover, .restart-button:hover { color: var(--navy); background: var(--paper-deep); }
-
-/* -- Screen 1: demo intro -- */
-.intro { width: min(1070px, calc(100% - 64px)); min-height: 100%; display: grid; grid-template-columns: 1.12fr .72fr; align-items: center; gap: 90px; margin: auto; padding: 30px 0; }
-.intro h1 { margin: 0 0 18px; font: 700 68px/.98 var(--font-sans); letter-spacing: -.045em; }
-.intro h1 em { color: var(--navy); font-style: normal; }
-.intro-lede { max-width: 440px; margin: 0; color: var(--muted); font-size: 16px; line-height: 1.7; }
-.intro-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 16px; margin-top: 30px; }
-/* Little "choices → pages" illustration */
-.intro-visual { padding: 18px; border: 1px solid var(--line); border-radius: 22px; background: var(--card); box-shadow: 0 24px 55px -44px rgb(23 21 111 / .35); transform: rotate(1.1deg); }
-.journey-map { display: grid; grid-template-columns: .83fr 26px 1fr; align-items: center; gap: 10px; min-height: 260px; padding: 25px; border-radius: 12px; background: var(--tint); }
-.journey-origin { display: flex; flex-direction: column; gap: 10px; padding: 15px 13px; border: 1px solid var(--line); border-radius: 9px; background: var(--card); }
-.journey-origin span { color: var(--muted); font-size: 11px; }
-.journey-origin strong { color: var(--navy); font: 600 19px/1.25 var(--font-sans); letter-spacing: -.02em; }
-.journey-stem { position: relative; height: 1px; background: var(--art-line); }
-.journey-stem::before, .journey-stem::after { position: absolute; left: 0; width: 1px; height: 52px; background: var(--art-line); content: ""; }
-.journey-stem::before { bottom: 0; } .journey-stem::after { top: 0; }
-.journey-pages { display: grid; gap: 8px; }
-.journey-pages span { padding: 10px 12px; border: 1px solid var(--line); border-radius: 7px; color: var(--navy); background: var(--card); font-size: 13px; font-weight: 500; }
-
-/* -- Screen 2: questions -- */
-.workspace { width: min(930px, calc(100% - 64px)); height: 100%; display: flex; flex-direction: column; margin: auto; padding-top: 24px; }
-.step-heading { display: flex; align-items: center; justify-content: space-between; gap: 15px; flex: 0 0 auto; }
-.step-why { margin: 0; color: var(--muted); font-size: 13px; }
-.step-count { color: var(--label); font: 11px var(--font-mono); letter-spacing: .08em; white-space: nowrap; }
-.step-count span { opacity: .6; }
-.question-content { width: min(680px, 100%); flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 16px 12px 20px 0; }
-.question-content h1 { max-width: 630px; margin: 0 0 16px; font: 700 36px/1.08 var(--font-sans); letter-spacing: -.035em; }
-.question-hint { margin: -6px 0 15px; color: var(--muted); font-size: 12px; }
-.options-list { display: grid; gap: 8px; }
-.option-row { display: grid; grid-template-columns: 20px minmax(0, 1fr) 32px; align-items: center; gap: 10px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 11px; background: var(--card); transition: border-color .15s, background .15s; }
-.option-row.selected { border-color: var(--navy); background: var(--tint-soft); box-shadow: 0 0 0 1px rgb(23 21 111 / .15); }
-.option-row input[type="radio"] { width: 16px; height: 16px; margin: 0; accent-color: var(--navy); cursor: pointer; }
-.option-row .option-text { width: 100%; min-width: 0; padding: 6px 2px; border: 0; outline: 0; color: var(--ink); background: transparent; font-size: 14px; }
-.option-row .option-text:focus { box-shadow: inset 0 -1px var(--navy); }
-.icon-button { width: 30px; height: 30px; display: inline-grid; place-items: center; padding: 0; border: 0; border-radius: 7px; color: var(--muted); background: transparent; cursor: pointer; }
-.icon-button:hover { color: #9a4c39; background: #f8e7df; }
-.add-option { min-height: 36px; width: fit-content; display: inline-flex; align-items: center; gap: 8px; margin-top: 10px; padding: 0 11px; border: 1px dashed #9ea4c4; border-radius: 9px; color: var(--navy); background: transparent; font-size: 12px; cursor: pointer; }
-.add-option:hover { border-color: var(--navy); background: var(--tint-soft); }
-.notes-field { display: block; margin-top: 15px; }
-.notes-field span { display: block; margin-bottom: 7px; color: var(--muted); font-size: 12px; }
-.notes-field textarea { width: 100%; min-height: 52px; resize: vertical; padding: 10px 12px; border: 1px solid var(--line); border-radius: 9px; color: var(--ink); background: var(--card); font-size: 13px; line-height: 1.5; }
-.notes-field textarea::placeholder { color: #8f95b3; }
-.demo-footer { position: sticky; bottom: 0; flex: 0 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 0 16px; border-top: 1px solid var(--line); }
-.footer-actions { display: flex; align-items: center; gap: 8px; }
-
-/* -- Screen 3: compare layouts -- */
-.compare-workspace { width: min(1060px, calc(100% - 64px)); height: auto; min-height: 100%; }
-.compare-heading { display: flex; align-items: end; justify-content: space-between; gap: 20px; margin: 12px 0 16px; }
-.compare-heading h1 { margin: 0 0 6px; font: 700 36px/1.05 var(--font-sans); letter-spacing: -.035em; }
-.compare-heading p { margin: 0; color: var(--muted); font-size: 13px; }
-.offer-chip { min-width: 142px; max-width: 220px; padding: 9px 13px; border: 1px solid var(--line); border-radius: 10px; background: var(--card); }
-.offer-chip span { display: block; margin-bottom: 4px; color: var(--muted); font-size: 11px; }
-.offer-chip strong { display: block; overflow-wrap: anywhere; color: var(--navy); font-size: 13px; }
-.layout-options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; padding-bottom: 14px; }
-.layout-choice { min-width: 0; padding: 0; overflow: hidden; border: 1px solid var(--line); border-radius: 15px; color: var(--ink); background: var(--card); text-align: left; cursor: pointer; transition: transform .18s, border-color .18s, box-shadow .18s; }
-.layout-choice:hover { transform: translateY(-2px); border-color: var(--art-line); box-shadow: 0 13px 28px -24px rgb(23 21 111 / .45); }
-.layout-choice.is-selected { border-color: var(--navy); box-shadow: 0 0 0 2px rgb(23 21 111 / .2); }
-.preview { position: relative; height: 220px; overflow: hidden; padding: 30px 14px 11px; background: var(--tint); }
-.layout-index, .layout-selected { position: absolute; top: 8px; z-index: 1; display: inline-flex; align-items: center; gap: 4px; padding: 4px 8px; border-radius: 5px; color: var(--card); background: var(--navy); font-size: 10px; font-weight: 600; }
-.layout-index { left: 12px; }
-.layout-selected { right: 12px; opacity: 0; transform: translateY(-2px); transition: opacity .15s, transform .15s; }
-.layout-selected.visible { opacity: 1; transform: none; }
-.layout-copy { padding: 12px 15px 14px; }
-.layout-copy h2 { margin: 0 0 4px; color: var(--navy); font: 600 18px var(--font-sans); letter-spacing: -.02em; }
-.layout-copy p { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.5; }
-.compare-workspace .demo-footer { margin-top: auto; }
-
-/* Mini website previews inside the layout cards */
-.preview-frame { width: 100%; height: 100%; overflow: hidden; border: 1px solid var(--line); border-radius: 7px; color: var(--navy); background: var(--card); box-shadow: 0 9px 20px -17px rgb(23 21 111 / .45); }
-.preview-top { height: 24px; display: flex; align-items: center; justify-content: space-between; padding: 0 9px; border-bottom: 1px solid var(--line); font: 600 8px var(--font-sans); }
-.preview-top small { color: var(--muted); font-size: 7px; font-weight: 400; }
-.mini-home { height: calc(100% - 24px); display: grid; grid-template-columns: .95fr 1fr; gap: 9px; align-items: center; padding: 11px; background: var(--paper); }
-.mini-home-copy { display: flex; flex-direction: column; align-items: start; gap: 5px; }
-.mini-headline { max-width: 150px; overflow-wrap: anywhere; font: 700 18px/.98 var(--font-sans); letter-spacing: -.04em; }
-.mini-text { width: 90%; color: var(--muted); font-size: 7px; line-height: 1.5; }
-.mini-cta { padding: 5px 8px; border-radius: 4px; color: #fff; background: var(--navy); font-size: 7px; }
-.mini-art { position: relative; height: 91%; overflow: hidden; border-radius: 55% 55% 5px 5px; background: var(--tint); }
-.mini-art::before { position: absolute; inset: 14% 17%; border: 1px solid var(--art-line); border-radius: 50%; box-shadow: 0 0 0 9px var(--tint), 0 0 0 10px var(--art-line), 0 0 0 19px var(--tint), 0 0 0 20px var(--art-line); content: ""; }
-.mini-art::after { position: absolute; top: 14%; right: 18%; width: 22px; height: 22px; border-radius: 50%; background: var(--peach); content: ""; }
-.preview-home-split .mini-home { grid-template-columns: 1fr; position: relative; background: var(--tint-soft); }
-.preview-home-split .mini-art { position: absolute; inset: 0; border-radius: 0; opacity: .58; }
-.preview-home-split .mini-home-copy { position: relative; z-index: 1; width: 67%; min-height: 100%; justify-content: center; padding: 11px; background: rgb(249 250 253 / .93); }
-.preview-home-split .mini-headline { font-size: 20px; }
-.mini-service { height: calc(100% - 24px); display: grid; grid-template-columns: .85fr 1fr; align-items: center; gap: 13px; padding: 11px 16px; background: var(--paper); }
-.service-illustration { position: relative; height: 100%; min-height: 80px; overflow: hidden; border-radius: 6px; background: var(--tint); }
-.service-illustration::before { position: absolute; width: 68px; height: 68px; left: 16%; bottom: -31px; border-radius: 50%; background: var(--art-fill); box-shadow: 55px -20px 0 5px var(--tint-2); content: ""; }
-.service-illustration::after { position: absolute; top: 14px; left: 20px; width: 24px; height: 32px; border: 1px solid var(--art-line); border-radius: 50% 50% 4px 4px; content: ""; }
-.mini-service-copy { display: flex; flex-direction: column; gap: 6px; }
-.mini-service-title { max-width: 150px; overflow-wrap: anywhere; font: 700 17px/1.02 var(--font-sans); letter-spacing: -.03em; }
-.mini-price { color: var(--muted); font-size: 7px; }
-.mini-rules { display: flex; flex-direction: column; gap: 4px; margin-top: 3px; }
-.mini-rules i { width: 90%; height: 4px; border-radius: 4px; background: var(--paper-deep); }
-.preview-service-brief .mini-service { grid-template-columns: 1fr .55fr; background: var(--tint-soft); }
-.preview-service-brief .service-illustration { order: 2; border-radius: 48px 48px 4px 4px; }
-.preview-service-brief .mini-service-copy { order: 1; padding: 8px; background: var(--card); }
-.preview-checkout { height: calc(100% - 24px); display: grid; grid-template-columns: .7fr 1fr; align-items: center; gap: 15px; padding: 12px 16px; background: var(--paper); }
-.checkout-intro { max-width: 130px; }
-.checkout-intro strong { display: block; margin: 0 0 6px; font: 700 21px/1 var(--font-sans); letter-spacing: -.04em; }
-.checkout-intro small { color: var(--muted); font-size: 7px; line-height: 1.4; }
-.checkout-box { padding: 11px; border: 1px solid var(--line); border-radius: 8px; background: var(--card); }
-.checkout-box-title { color: var(--muted); font-size: 7px; }
-.checkout-box-row { display: flex; justify-content: space-between; gap: 5px; margin-top: 8px; padding: 6px 0; border-top: 1px solid var(--line); color: var(--navy); font-size: 8px; }
-.fake-input { height: 17px; margin-top: 5px; padding: 3px 5px; border: 1px solid var(--line); border-radius: 3px; color: #8f95b3; font-size: 7px; }
-.fake-submit { height: 17px; margin-top: 8px; border-radius: 3px; background: var(--navy); }
-.checkout-layout.is-compact .preview-checkout { display: block; padding-top: 7px; }
-.checkout-layout.is-compact .checkout-intro { max-width: none; text-align: center; }
-.checkout-layout.is-compact .checkout-intro strong { margin: 3px 0; font-size: 17px; }
-.checkout-layout.is-compact .checkout-intro small { display: none; }
-.checkout-layout.is-compact .checkout-box { width: 79%; margin: 6px auto 0; padding: 6px 9px; display: grid; grid-template-columns: 1fr 1fr; gap: 0 8px; }
-.checkout-layout.is-compact .checkout-box-title, .checkout-layout.is-compact .fake-submit { grid-column: 1 / -1; }
-.checkout-layout.is-compact .checkout-box-row { margin-top: 5px; }
-
-/* -- Screen 4: the finished draft website -- */
-.draft-workspace { width: min(1100px, calc(100% - 64px)); margin: auto; padding: 22px 0 20px; }
-.draft-heading { display: flex; align-items: end; justify-content: space-between; gap: 16px; margin-bottom: 14px; }
-.draft-heading h1 { margin: 0 0 5px; font: 700 36px/1 var(--font-sans); letter-spacing: -.04em; }
-.draft-heading p { margin: 0; color: var(--muted); font-size: 12px; }
-.browser { overflow: hidden; border: 1px solid var(--line); border-radius: 15px; background: var(--card); box-shadow: 0 24px 55px -44px rgb(23 21 111 / .35); }
-.browser-bar { height: 30px; display: grid; grid-template-columns: 1fr minmax(120px, 1.4fr) 1fr; align-items: center; padding: 0 12px; border-bottom: 1px solid var(--line); color: var(--muted); background: var(--paper-deep); text-align: center; font-size: 10px; }
-.browser-dots { display: flex; gap: 4px; } .browser-dots i { width: 7px; height: 7px; border-radius: 50%; background: var(--line); }
-.draft-nav { min-height: 50px; display: flex; align-items: center; justify-content: space-between; gap: 13px; padding: 0 32px; border-bottom: 1px solid var(--line); }
-.draft-brand { color: var(--navy); font: 600 15px var(--font-sans); letter-spacing: -.02em; }
-.draft-nav-links { display: flex; gap: 24px; }
-.draft-nav-links button { min-height: 34px; padding: 0; border: 0; border-bottom: 1px solid transparent; color: var(--muted); background: none; font-size: 12px; cursor: pointer; }
-.draft-nav-links button.active { border-color: var(--navy); color: var(--navy); }
-.site-page { min-height: 290px; }
-.site-home { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 35px; padding: 26px 64px; background: var(--paper); }
-.site-home-copy { max-width: 390px; }
-.site-home h2 { margin: 0 0 12px; color: var(--navy); font: 700 52px/.94 var(--font-sans); letter-spacing: -.05em; overflow-wrap: anywhere; }
-.site-home p, .site-service p, .site-checkout p { color: var(--muted); font-size: 12px; line-height: 1.65; }
-.site-cta { min-height: 34px; display: inline-flex; align-items: center; gap: 8px; margin-top: 8px; padding: 0 12px; border: 0; border-radius: 7px; color: var(--card); background: var(--navy); font-size: 11px; cursor: pointer; }
-.site-cta:hover { background: var(--navy-hover); }
-.site-art { position: relative; min-height: 210px; overflow: hidden; border-radius: 50% 50% 7px 7px; background: var(--tint); }
-.site-art::before { position: absolute; width: 58%; aspect-ratio: 1; right: 13%; bottom: -37%; border: 1px solid var(--art-line); border-radius: 50%; box-shadow: 0 0 0 17px var(--tint), 0 0 0 18px var(--art-line), 0 0 0 36px var(--tint), 0 0 0 37px var(--art-line); content: ""; }
-.site-art::after { position: absolute; top: 18%; right: 24%; width: 45px; aspect-ratio: 1; border-radius: 50%; background: var(--peach); content: ""; }
-.site-layout-home-split.site-home { grid-template-columns: 1fr .9fr; background: var(--tint-soft); }
-.site-layout-home-split .site-art { order: -1; min-height: 240px; border-radius: 10px 65px 10px 10px; background: linear-gradient(135deg, var(--tint-2), #e6e4f6); }
-.site-layout-home-split .site-art::before { width: 63%; left: 7%; right: auto; bottom: -42%; box-shadow: 0 0 0 17px transparent, 0 0 0 18px var(--art-line), 0 0 0 36px transparent, 0 0 0 37px var(--art-line); }
-.site-service { display: grid; grid-template-columns: .9fr 1fr; align-items: center; gap: 48px; padding: 26px 64px; background: var(--paper); }
-.service-art { position: relative; min-height: 230px; overflow: hidden; border-radius: 8px; background: var(--tint); }
-.service-art::before { position: absolute; width: 60%; aspect-ratio: 1; left: 16%; bottom: -31%; border-radius: 50%; background: var(--art-fill); box-shadow: 90px -20px 0 8px var(--tint-2); content: ""; }
-.service-art::after { position: absolute; top: 12%; left: 15%; width: 33%; height: 42%; border: 1px solid var(--art-line); border-radius: 50% 50% 4px 4px; content: ""; }
-.site-service h2 { margin: 0 0 10px; color: var(--navy); font: 700 38px/1.02 var(--font-sans); letter-spacing: -.04em; overflow-wrap: anywhere; }
-.site-layout-service-brief.site-service { grid-template-columns: 1.1fr .66fr; background: var(--tint-soft); }
-.site-layout-service-brief .service-art { order: 2; min-height: 240px; border-radius: 80px 80px 7px 7px; }
-.site-layout-service-brief .service-copy { order: 1; padding: 15px; background: var(--card); }
-.service-facts { display: flex; flex-wrap: wrap; gap: 24px; margin: 14px 0; }
-.service-facts span, .policy-note span, .checkout-detail span { display: block; margin-bottom: 4px; color: var(--muted); font-size: 11px; }
-.service-facts strong { color: var(--navy); font-size: 12px; }
-.policy-note { padding: 10px 12px; border-left: 2px solid var(--navy); background: var(--card); }
-.policy-note p { margin: 0; }
-.user-note { padding: 8px 10px; border-radius: 5px; background: #fbeee8; }
-.site-checkout { display: grid; grid-template-columns: .8fr 1fr; align-items: center; gap: 35px; padding: 26px 96px; background: var(--paper); }
-.site-checkout h2 { margin: 0 0 12px; color: var(--navy); font: 700 46px/.98 var(--font-sans); letter-spacing: -.045em; }
-.checkout-card { padding: 16px; border: 1px solid var(--line); border-radius: 12px; background: var(--card); }
-.checkout-card-head { display: flex; justify-content: space-between; padding-bottom: 10px; border-bottom: 1px solid var(--line); color: var(--muted); font-size: 11px; }
-.sample-pill { padding: 3px 6px; border-radius: 4px; color: var(--navy); background: var(--paper-deep); font-size: 10px; }
-.checkout-detail { padding: 10px 0; border-bottom: 1px solid var(--line); }
-.checkout-detail strong { color: var(--navy); font-size: 12px; overflow-wrap: anywhere; }
-.checkout-disabled { width: 100%; min-height: 34px; margin-top: 12px; border: 1px solid var(--line); border-radius: 6px; color: var(--muted); background: var(--paper-deep); font-size: 11px; cursor: not-allowed; }
-.checkout-compact.site-checkout { display: block; text-align: center; }
-.checkout-compact .checkout-card { width: min(540px, 100%); display: grid; grid-template-columns: 1fr 1fr; gap: 0 18px; margin: 15px auto 0; text-align: left; }
-.checkout-compact .checkout-card-head, .checkout-compact .checkout-disabled { grid-column: 1 / -1; }
-.draft-site-footer { display: flex; justify-content: space-between; gap: 9px; padding: 9px 32px; color: var(--muted); background: var(--card); font-size: 10px; border-top: 1px solid var(--line); }
-.draft-bottom { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding-top: 12px; }
-.reflection { display: flex; align-items: center; gap: 9px; color: var(--muted); font-size: 12px; line-height: 1.5; }
-.reflection-mark { width: 24px; height: 24px; flex: none; display: grid; place-items: center; border-radius: 50%; color: var(--navy); background: var(--tint); }
-.reflection strong { color: var(--navy); }
-.reflection-layouts { display: inline-block; margin-top: 2px; font-size: 11px; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; }
   </style>
 </head>
 <body>
 
-<!-- The Forma mark, defined once and reused by every .logo via <use>.
-     Edit the shapes here and the logo updates everywhere. -->
+<!-- The staso mark (from Figma "IF-P3" node 293:2), defined once and reused by
+     every .logo via <use>. Edit it here and the logo updates everywhere.
+     Light-blue rounded square + the navy "S", turned 43.25° like in Figma. -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  <symbol id="forma-mark" viewBox="0 0 40 40">
-    <rect width="40" height="40" rx="14" fill="#17156f"/>
-    <rect x="12" y="12"   width="16" height="4.5" rx="2.25" fill="#f4f3ff"/>
-    <rect x="12" y="19.5" width="10" height="4.5" rx="2.25" fill="#b5b4de"/>
+  <symbol id="staso-mark" viewBox="0 0 158 158">
+    <rect width="158" height="158" rx="16" fill="#9cc3ec"/>
+    <path transform="translate(78.4 73.6) rotate(43.25) translate(-59.218 -63.155)" fill="#000456"
+          d="M102.789 40.7525C101.826 41.2292 101.023 41.4675 100.381 41.4675C99.258 41.4675 98.2148 40.9114 97.2519 39.7993C90.0303 30.7431 82.4876 24.388 74.624 20.7337C66.7604 17.0795 59.9399 15.2524 54.1626 15.2524C49.9901 15.2524 46.1385 16.1262 42.6079 17.8739C39.0773 19.6216 37.312 22.7992 37.312 27.4067C37.312 30.902 38.5959 33.8413 41.1636 36.2245C43.8918 38.4488 47.3421 40.2759 51.5146 41.7058C55.6872 43.1357 59.9399 44.4067 64.2729 45.5189C70.5317 46.9488 76.7905 48.617 83.0493 50.5236C89.4686 52.4301 95.3262 54.9722 100.622 58.1498C105.918 61.1685 110.171 64.9816 113.38 69.5891C116.75 74.1966 118.436 79.9957 118.436 86.9864C118.436 94.4537 116.349 101.127 112.177 107.005C108.165 112.884 102.387 117.571 94.8447 121.066C87.3021 124.402 78.3151 126.071 67.8838 126.071C62.9088 126.071 58.0141 125.435 53.1997 124.164C48.5457 123.052 44.1325 121.543 39.96 119.636C38.9971 119.159 38.2749 118.921 37.7935 118.921C36.6701 118.921 36.1084 119.477 36.1084 120.589C36.1084 120.907 36.2689 121.543 36.5898 122.496C36.9108 123.449 37.0713 124.085 37.0713 124.402C37.0713 125.673 36.1084 126.309 34.1826 126.309H25.5166C23.7513 126.309 22.3872 125.515 21.4243 123.926L0.722168 85.5565C0.240723 84.6032 0 83.8882 0 83.4116C0 82.2994 0.641927 81.3462 1.92578 80.5518L9.38818 76.262C10.3511 75.7854 11.0732 75.5471 11.5547 75.5471C12.5176 75.5471 13.4002 76.262 14.2026 77.6919C22.0662 89.2901 30.652 97.5518 39.96 102.477C49.4284 107.402 59.0573 109.865 68.8467 109.865C84.2529 109.865 91.956 105.337 91.956 96.2808C91.956 92.15 90.0303 88.7341 86.1787 86.0331C82.4876 83.3322 77.8336 81.1078 72.2168 79.3602C66.7604 77.6125 61.2238 76.1031 55.6069 74.8321C45.3361 72.29 37.1515 69.4302 31.0532 66.2526C24.9549 62.9162 20.3812 59.4208 17.332 55.7666C14.2829 51.9535 12.1966 48.2199 11.0732 44.5656C10.1104 40.7525 9.62891 37.0983 9.62891 33.603C9.62891 24.0702 13.32 16.2057 20.7021 10.0094C28.0843 3.8131 38.1144 0.714962 50.7925 0.714962C58.3351 0.714962 64.9951 1.74768 70.7724 3.81311C76.5498 5.71965 80.5618 7.30844 82.8086 8.57948C83.4505 8.89724 83.932 9.05612 84.2529 9.05612C84.7344 9.05612 84.9751 8.73836 84.9751 8.10284C84.9751 7.62621 84.7344 6.67293 84.2529 5.24302C84.0924 4.44862 83.932 3.89254 83.7715 3.57478C83.7715 3.09815 83.7715 2.70095 83.7715 2.38319C83.7715 0.794395 84.8146 0 86.9009 0H93.1597C95.2459 0 96.61 0.873839 97.2519 2.62152L109.288 32.888C109.77 33.8413 110.01 34.6357 110.01 35.2712C110.01 36.3833 109.368 37.2572 108.084 37.8927L102.789 40.7525Z"/>
   </symbol>
 </svg>
 
@@ -545,17 +357,17 @@ body.demo-locked .deck-nav .lock { display: inline; } /* "demo running" hint */
     <img class="s-photo" src="assets/landscape.jpg" alt="Orchards and hills in a farming valley">
   </section>
 
-  <!-- 2 · Introducing Forma — the photo from slide 1 fades to white
+  <!-- 2 · Introducing staso — the photo from slide 1 fades to white
        (via the normal cross-fade) and the logo fades in on top -->
-  <section class="slide" data-title="Introducing Forma">
+  <section class="slide" data-title="Introducing staso">
     <div class="s-reveal anim" style="--d: 300ms">
-      <span class="logo" role="img" aria-label="Forma"><svg class="logo-mark" aria-hidden="true"><use href="#forma-mark"/></svg><span class="logo-word">forma</span></span>
+      <span class="logo" role="img" aria-label="staso"><span class="logo-word">staso</span><svg class="logo-mark" aria-hidden="true"><use href="#staso-mark"/></svg></span>
     </div>
   </section>
 
   <!-- 3 · The reversal -->
   <section class="slide" data-title="The reversal">
-    <header class="s-header"><span class="logo"><svg class="logo-mark" aria-hidden="true"><use href="#forma-mark"/></svg><span class="logo-word">forma</span></span></header>
+    <header class="s-header"><span class="logo"><span class="logo-word">staso</span><svg class="logo-mark" aria-hidden="true"><use href="#staso-mark"/></svg></span></header>
     <h1 class="s-reversal">
       <span class="anim">You don’t<br>prompt AI.</span>
       <span class="em anim" style="--d: 500ms">AI prompts you.</span>
@@ -565,112 +377,112 @@ body.demo-locked .deck-nav .lock { display: inline; } /* "demo running" hint */
   <!-- 4–7 · The blank prompt. The text in data-type is "typed" when the
        slide opens. Leave it empty for just a blinking cursor. -->
   <section class="slide" data-group="prompt" data-title="The blank prompt">
-    <header class="s-header"><span class="logo"><svg class="logo-mark" aria-hidden="true"><use href="#forma-mark"/></svg><span class="logo-word">forma</span></span></header>
+    <header class="s-header"><span class="logo"><span class="logo-word">staso</span><svg class="logo-mark" aria-hidden="true"><use href="#staso-mark"/></svg></span></header>
     <h1 class="s-title" style="top: 177px">The blank prompt<br>is the problem.</h1>
     <div class="s-prompt"><span class="typed" data-type=""></span><span class="send" aria-hidden="true">↗</span></div>
   </section>
   <section class="slide" data-group="prompt" data-title="The blank prompt — choice paralysis">
-    <header class="s-header"><span class="logo"><svg class="logo-mark" aria-hidden="true"><use href="#forma-mark"/></svg><span class="logo-word">forma</span></span></header>
+    <header class="s-header"><span class="logo"><span class="logo-word">staso</span><svg class="logo-mark" aria-hidden="true"><use href="#staso-mark"/></svg></span></header>
     <h1 class="s-title" style="top: 177px">The blank prompt<br>is the problem.</h1>
     <div class="s-prompt"><span class="typed" data-type="Choice Paralysis"></span><span class="send" aria-hidden="true">↗</span></div>
   </section>
   <section class="slide" data-group="prompt" data-title="The blank prompt — explaining a vision">
-    <header class="s-header"><span class="logo"><svg class="logo-mark" aria-hidden="true"><use href="#forma-mark"/></svg><span class="logo-word">forma</span></span></header>
+    <header class="s-header"><span class="logo"><span class="logo-word">staso</span><svg class="logo-mark" aria-hidden="true"><use href="#staso-mark"/></svg></span></header>
     <h1 class="s-title" style="top: 177px">The blank prompt<br>is the problem.</h1>
     <div class="s-prompt"><span class="typed" data-type="Trouble Explaining Vision"></span><span class="send" aria-hidden="true">↗</span></div>
   </section>
   <section class="slide" data-group="prompt" data-title="The blank prompt — resistance to AI">
-    <header class="s-header"><span class="logo"><svg class="logo-mark" aria-hidden="true"><use href="#forma-mark"/></svg><span class="logo-word">forma</span></span></header>
+    <header class="s-header"><span class="logo"><span class="logo-word">staso</span><svg class="logo-mark" aria-hidden="true"><use href="#staso-mark"/></svg></span></header>
     <h1 class="s-title" style="top: 177px">The blank prompt<br>is the problem.</h1>
     <div class="s-prompt"><span class="typed" data-type="Fear of or resistance to AI"></span><span class="send" aria-hidden="true">↗</span></div>
   </section>
 
-  <!-- 8 · Who we serve. Icon positions/sizes are copied from Figma. -->
+  <!-- 8 · Who we serve. Icons are a 4×2 grid; add/remove .s-serve-item rows freely.
+       All icons share one style (assets/icon-*.svg: 96 grid, 3px navy stroke, light-blue fill). -->
   <section class="slide" data-title="Who we serve">
-    <header class="s-header"><span class="logo"><svg class="logo-mark" aria-hidden="true"><use href="#forma-mark"/></svg><span class="logo-word">forma</span></span></header>
+    <header class="s-header"><span class="logo"><span class="logo-word">staso</span><svg class="logo-mark" aria-hidden="true"><use href="#staso-mark"/></svg></span></header>
     <h1 class="s-title s-serve-title">Small business owners moving into<br>e-commerce with non-traditional products.</h1>
-    <img class="s-icon anim" style="--d: 100ms; left: 138px;  top: 419px; width: 241px" src="assets/icon-sprout.svg"   alt="Farming">
-    <img class="s-icon anim" style="--d: 200ms; left: 416px;  top: 498px; width: 241px" src="assets/icon-baby.svg"     alt="Babysitting">
-    <img class="s-icon anim" style="--d: 300ms; left: 673px;  top: 652px; width: 359px" src="assets/icon-fishing.svg"  alt="Fishing">
-    <img class="s-icon anim" style="--d: 400ms; left: 845px;  top: 366px; width: 316px" src="assets/icon-firewood.svg" alt="Firewood">
-    <img class="s-icon anim" style="--d: 500ms; left: 1192px; top: 617px; width: 289px" src="assets/icon-moving.svg"   alt="Moving">
-    <img class="s-icon anim" style="--d: 600ms; left: 1352px; top: 311px; width: 305px" src="assets/icon-funeral.svg"  alt="Funeral services">
-    <img class="s-icon anim" style="--d: 700ms; left: 1555px; top: 674px; width: 268px" src="assets/icon-religion.svg" alt="Religious goods">
+    <div class="s-serve-grid">
+      <div class="s-serve-item anim" style="--d: 100ms"><span class="s-disc"><img src="assets/icon-sprout.svg" alt=""></span>Farming</div>
+      <div class="s-serve-item anim" style="--d: 180ms"><span class="s-disc"><img src="assets/icon-baby.svg" alt=""></span>Babysitting</div>
+      <div class="s-serve-item anim" style="--d: 260ms"><span class="s-disc"><img src="assets/icon-fishing.svg" alt=""></span>Fishing</div>
+      <div class="s-serve-item anim" style="--d: 340ms"><span class="s-disc"><img src="assets/icon-firewood.svg" alt=""></span>Firewood</div>
+      <div class="s-serve-item anim" style="--d: 420ms"><span class="s-disc"><img src="assets/icon-moving.svg" alt=""></span>Moving</div>
+      <div class="s-serve-item anim" style="--d: 500ms"><span class="s-disc"><img src="assets/icon-funeral.svg" alt=""></span>Funeral services</div>
+      <div class="s-serve-item anim" style="--d: 580ms"><span class="s-disc"><img src="assets/icon-religion.svg" alt=""></span>Religious goods</div>
+      <div class="s-serve-item anim" style="--d: 660ms"><span class="s-disc"><img src="assets/icon-dog.svg" alt=""></span>Pet care</div>
+    </div>
   </section>
 
   <!-- 9 · We understand each customer's vertical -->
   <section class="slide" data-title="Verticals">
-    <header class="s-header"><span class="logo"><svg class="logo-mark" aria-hidden="true"><use href="#forma-mark"/></svg><span class="logo-word">forma</span></span></header>
+    <header class="s-header"><span class="logo"><span class="logo-word">staso</span><svg class="logo-mark" aria-hidden="true"><use href="#staso-mark"/></svg></span></header>
     <h1 class="s-title" style="top: 177px">We understand each customer’s vertical</h1>
     <div class="s-step s-mono anim" style="--d: 100ms; left: 136px">01 / Real examples</div>
-    <div class="s-circle anim" style="--d: 100ms; left: 136px">🌐</div>
+    <div class="s-circle anim" style="--d: 100ms; left: 136px"><img src="assets/icon-globe.svg" alt="Globe"></div>
     <div class="s-arrow anim" style="--d: 350ms; left: 567px">→</div>
     <div class="s-step s-mono anim" style="--d: 500ms; left: 716px">02 / Guided questions</div>
-    <div class="s-circle anim" style="--d: 500ms; left: 716px">📋</div>
+    <div class="s-circle anim" style="--d: 500ms; left: 716px"><img src="assets/icon-clipboard.svg" alt="Clipboard"></div>
     <div class="s-arrow anim" style="--d: 750ms; left: 1147px">→</div>
     <div class="s-step s-mono anim" style="--d: 900ms; left: 1296px">03 / Vertical-fit store</div>
-    <div class="s-circle anim" style="--d: 900ms; left: 1296px">🏪</div>
+    <div class="s-circle anim" style="--d: 900ms; left: 1296px"><img src="assets/icon-store.svg" alt="Storefront"></div>
     <p class="s-tagline anim" style="--d: 1200ms">The app fits the business — not the other way around.</p>
   </section>
 
   <!-- 10 · Competitive advantage. Grid = label column + 3 product columns.
-       Each row: label, store builders, vibe coding, Forma.
+       Each row: label, store builders, vibe coding, staso.
        Use <span class="yes">✓</span> or <span class="no">–</span>. -->
   <section class="slide" data-title="Competitive advantage">
-    <header class="s-header"><span class="logo"><svg class="logo-mark" aria-hidden="true"><use href="#forma-mark"/></svg><span class="logo-word">forma</span></span></header>
+    <header class="s-header"><span class="logo"><span class="logo-word">staso</span><svg class="logo-mark" aria-hidden="true"><use href="#staso-mark"/></svg></span></header>
     <h1 class="s-title" style="top: 150px; font-size: 76px">Competitive advantage</h1>
     <div class="s-table" role="table" aria-label="Feature comparison">
       <!-- header row -->
       <div class="blank"></div>
       <div class="c-light head"><strong>Store builders</strong><small>Shopify, Wix</small></div>
       <div class="c-light head"><strong>Vibe coding tools</strong><small>An open-ended prompt</small></div>
-      <div class="c-forma head"><strong>Forma</strong><small>A guided starting point</small></div>
+      <div class="c-brand head"><strong>staso</strong><small>A guided starting point</small></div>
       <!-- rows -->
       <div class="row-label">Builds e-commerce<br>websites</div>
-      <div class="c-light"><span class="yes">✓</span></div><div class="c-light"><span class="yes">✓</span></div><div class="c-forma"><span class="yes">✓</span></div>
+      <div class="c-light"><span class="yes">✓</span></div><div class="c-light"><span class="yes">✓</span></div><div class="c-brand"><span class="yes">✓</span></div>
       <div class="row-label">Guides users with<br>structured questions</div>
-      <div class="c-light"><span class="no">–</span></div><div class="c-light"><span class="yes">✓</span></div><div class="c-forma"><span class="yes">✓</span></div>
+      <div class="c-light"><span class="no">–</span></div><div class="c-light"><span class="yes">✓</span></div><div class="c-brand"><span class="yes">✓</span></div>
       <div class="row-label">Covers legal, trust<br>&amp; logistics blind spots</div>
-      <div class="c-light"><span class="yes">✓</span></div><div class="c-light"><span class="no">–</span></div><div class="c-forma"><span class="yes">✓</span></div>
+      <div class="c-light"><span class="yes">✓</span></div><div class="c-light"><span class="no">–</span></div><div class="c-brand"><span class="yes">✓</span></div>
       <div class="row-label">Pulls real examples<br>for your vertical</div>
-      <div class="c-light"><span class="no">–</span></div><div class="c-light"><span class="no">–</span></div><div class="c-forma"><span class="yes">✓</span></div>
+      <div class="c-light"><span class="no">–</span></div><div class="c-light"><span class="no">–</span></div><div class="c-brand"><span class="yes">✓</span></div>
       <div class="row-label">Tailored for niche<br>e-commerce verticals</div>
-      <div class="c-light"><span class="no">–</span></div><div class="c-light"><span class="no">–</span></div><div class="c-forma"><span class="yes">✓</span></div>
+      <div class="c-light"><span class="no">–</span></div><div class="c-light"><span class="no">–</span></div><div class="c-brand"><span class="yes">✓</span></div>
       <!-- rounded bottom caps -->
-      <div class="blank"></div><div class="c-light cap"></div><div class="c-light cap"></div><div class="c-forma cap"></div>
+      <div class="blank"></div><div class="c-light cap"></div><div class="c-light cap"></div><div class="c-brand cap"></div>
     </div>
     <div class="s-legend">✓ Supported   – Not assessed</div>
   </section>
 
-  <!-- 11 · DEMO. data-demo marks this as the slide that locks navigation.
-       The demo app renders into #demo-main (see DEMO SCRIPT). -->
+  <!-- 11 · DEMO — the live web app, embedded.
+       DEMO_URL: change the src below to embed a different site.
+       Arrow keys go to the next/previous slide as usual. If you click into the
+       site, it takes the keyboard; move the mouse off the site (or click the
+       slide around it) and the arrow keys drive the slides again. -->
   <section class="slide" data-title="Demo" data-demo>
-    <header class="s-header"><span class="logo"><svg class="logo-mark" aria-hidden="true"><use href="#forma-mark"/></svg><span class="logo-word">forma</span></span></header>
+    <header class="s-header"><span class="logo"><span class="logo-word">staso</span><svg class="logo-mark" aria-hidden="true"><use href="#staso-mark"/></svg></span></header>
     <h1 class="s-title s-demo-title">Demo</h1>
-    <div class="demo" id="demo">
-      <div class="demo-app">
-        <div class="demo-bar">
-          <span class="demo-status" id="demo-status"></span>
-          <button class="quiet-button" id="demo-restart" type="button" hidden>Start over <span aria-hidden="true">↺</span></button>
-        </div>
-        <div class="progress-track" aria-label="Walkthrough progress"><div class="progress-fill" id="demo-progress"></div></div>
-        <div id="demo-main" tabindex="-1"></div>
-      </div>
+    <div class="demo">
+      <iframe id="demo-frame" src="https://ai-prompts-you-webapp.replit.app/" title="staso live demo"
+              allow="clipboard-write; fullscreen" referrerpolicy="no-referrer-when-downgrade"></iframe>
     </div>
   </section>
 
   <!-- 12 · Closing -->
   <section class="slide" data-title="Closing">
-    <header class="s-header"><span class="logo"><svg class="logo-mark" aria-hidden="true"><use href="#forma-mark"/></svg><span class="logo-word">forma</span></span></header>
+    <header class="s-header"><span class="logo"><span class="logo-word">staso</span><svg class="logo-mark" aria-hidden="true"><use href="#staso-mark"/></svg></span></header>
     <h1 class="s-title s-close-1 anim">The future of building isn’t<br>getting better at prompting.</h1>
-    <h2 class="s-title s-close-2 anim" style="--d: 500ms">It’s AI that knows<br>what to ask.</h2>
-    <div class="s-underline anim" style="--d: 900ms; left: 96px; top: 795px; width: 640px; height: 14px; border-radius: 7px;"></div>
+    <h2 class="s-title s-close-2 anim" style="--d: 500ms">It’s AI that knows<br><span class="s-close-ul">what to ask.</span></h2>
   </section>
 
   <!-- 13 · Final slide — just the logo, centered on white -->
-  <section class="slide" data-title="Forma">
+  <section class="slide" data-title="staso">
     <div class="s-reveal is-centered anim" style="--d: 200ms">
-      <span class="logo" role="img" aria-label="Forma"><svg class="logo-mark" aria-hidden="true"><use href="#forma-mark"/></svg><span class="logo-word">forma</span></span>
+      <span class="logo" role="img" aria-label="staso"><span class="logo-word">staso</span><svg class="logo-mark" aria-hidden="true"><use href="#staso-mark"/></svg></span>
     </div>
   </section>
 </main>
@@ -679,354 +491,16 @@ body.demo-locked .deck-nav .lock { display: inline; } /* "demo running" hint */
 <nav class="deck-nav" aria-label="Slide controls">
   <button type="button" id="nav-prev" aria-label="Previous slide">‹</button>
   <span id="nav-count">1 / 12</span>
-  <span class="lock">· demo running</span>
   <button type="button" id="nav-next" aria-label="Next slide">›</button>
 </nav>
 
 <script>
 "use strict";
 
-/* ============================================================================
-   6. DEMO SCRIPT
-   A self-contained walkthrough with four screens:
-     intro → 3 questions → 3 layout comparisons → finished draft website.
-   It exposes window.FormaDemo so the slideshow can tell whether the demo
-   is running or finished, and fires a "formademo:change" event on every
-   screen change.
-   ========================================================================== */
-window.FormaDemo = (() => {
-  /* ---- Content: edit questions and layout options here ---- */
-  const questions = [
-    { id: "offer", prompt: "What would you like your business to offer?",
-      why: "Start with the thing you want people to find.",
-      defaults: ["Products", "Services", "Membership"] },
-    { id: "action", prompt: "What should a customer be able to do?",
-      why: "Choose the action that makes sense for your business.",
-      defaults: ["Buy", "Book", "Request a quote"] },
-    { id: "flexibility", prompt: "How flexible should cancellations be?",
-      why: "A clear policy helps customers know what to expect.",
-      defaults: ["Flexible cancellations", "Changes with notice", "All sales final"] },
-  ];
-
-  const layoutStages = [
-    { id: "home", label: "Homepage", title: "Which welcome feels right?",
-      intro: "Choose the first impression for your business.",
-      layouts: [
-        { id: "home-welcome", name: "A warm welcome", description: "A generous introduction puts your offer and next step in context." },
-        { id: "home-split", name: "A clear starting point", description: "A bolder, split composition leads with a focused invitation." },
-      ] },
-    { id: "service", label: "Offer page", title: "How should the offer read?",
-      intro: "Same offer. A different way to bring the details forward.",
-      layouts: [
-        { id: "service-story", name: "The full story", description: "A spacious explanation balances your offer with practical details." },
-        { id: "service-brief", name: "The quick read", description: "A compact offer card makes the essentials easy to scan." },
-      ] },
-    { id: "checkout", label: "Checkout", title: "One last layout choice.",
-      intro: "This is a sample flow only. No details or payment are collected.",
-      layouts: [
-        { id: "checkout-guided", name: "A guided next step", description: "The next step and offer summary sit side by side." },
-        { id: "checkout-compact", name: "One clear summary", description: "A single focused panel keeps the decision in one place." },
-      ] },
-  ];
-
-  /* ---- State ---- */
-  const freshOptions = () => questions.map((q) => q.defaults.map((text, i) => ({ id: `${q.id}-${i}`, text })));
-  const state = {
-    page: "intro",          // "intro" | "questions" | "compare" | "draft"
-    questionIndex: 0,
-    answers: questions.map(() => ({ selected: null, note: "" })),
-    options: freshOptions(),
-    compareIndex: 0,
-    choices: {},            // { home: layoutId, service: layoutId, checkout: layoutId }
-    draftPage: "home",
-  };
-
-  const main = document.getElementById("demo-main");
-  const progress = document.getElementById("demo-progress");
-  const status = document.getElementById("demo-status");
-  const restartTop = document.getElementById("demo-restart");
-
-  /* ---- Helpers ---- */
-  const escapeHTML = (v) => String(v).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
-  const answerText = (i) => {
-    const opt = state.options[i].find((o) => o.id === state.answers[i].selected);
-    return opt && opt.text.trim() ? opt.text.trim() : questions[i].defaults[0];
-  };
-  const offerText = () => {
-    const opt = state.options[0].find((o) => o.id === state.answers[0].selected);
-    return opt && opt.text.trim() ? opt.text.trim() : "Your offer";
-  };
-  const noteText = (i) => state.answers[i].note.trim();
-  const selectedLayoutSummary = () => layoutStages.map((stage) => {
-    const layout = stage.layouts.find((l) => l.id === state.choices[stage.id]);
-    return `${stage.label} — ${layout ? layout.name : "Not selected"}`;
-  }).join(" · ");
-
-  /* ---- Toolbar: progress bar + status text ---- */
-  function setProgress() {
-    let step = 0; // 6 steps total: 3 questions + 3 layouts
-    if (state.page === "questions") step = state.questionIndex + 1;
-    if (state.page === "compare") step = 3 + state.compareIndex + 1;
-    if (state.page === "draft") step = 6;
-    progress.style.transform = `scaleX(${step / 6})`;
-    restartTop.hidden = state.page === "intro";
-    status.textContent = state.page === "intro" ? ""
-      : state.page === "draft" ? "Finished · press → to continue"
-      : `Step ${step} of 6`;
-  }
-
-  /* ---- Screen 1: intro ---- */
-  function renderIntro() {
-    main.innerHTML = `
-      <section class="intro" aria-labelledby="intro-title">
-        <div>
-          <h1 id="intro-title">Your business.<br><em>Your choices.</em></h1>
-          <p class="intro-lede">See how Forma helps you shape an online business by making clear, editable choices — no prompting required.</p>
-          <div class="intro-actions">
-            <button class="primary-button" type="button" data-action="start">Get started <span class="arrow" aria-hidden="true">→</span></button>
-          </div>
-        </div>
-        <aside class="intro-visual" aria-label="Three choices shaping three pages">
-          <div class="journey-map">
-            <div class="journey-origin"><span>Your choices</span><strong>Offer<br>Action<br>Policy</strong></div>
-            <div class="journey-stem" aria-hidden="true"></div>
-            <div class="journey-pages"><span>Home</span><span>Offer</span><span>Checkout</span></div>
-          </div>
-        </aside>
-      </section>`;
-  }
-
-  /* ---- Screen 2: one question at a time ---- */
-  function renderQuestion() {
-    const q = questions[state.questionIndex];
-    const answer = state.answers[state.questionIndex];
-    const options = state.options[state.questionIndex];
-    const chosen = answer.selected && options.some((o) => o.id === answer.selected);
-    const optionMarkup = options.map((o) => `
-      <div class="option-row ${o.id === answer.selected ? "selected" : ""}">
-        <input type="radio" name="answer" value="${escapeHTML(o.id)}" ${o.id === answer.selected ? "checked" : ""} aria-label="Select ${escapeHTML(o.text)}">
-        <input class="option-text" type="text" value="${escapeHTML(o.text)}" aria-label="Edit option" data-option-id="${escapeHTML(o.id)}" maxlength="90">
-        <button class="icon-button" type="button" data-action="remove-option" data-option-id="${escapeHTML(o.id)}" aria-label="Remove option ${escapeHTML(o.text)}" title="Remove option"><span aria-hidden="true">×</span></button>
-      </div>`).join("");
-    main.innerHTML = `
-      <section class="workspace" aria-labelledby="question-title">
-        <div class="step-heading"><p class="step-why">${escapeHTML(q.why)}</p><div class="step-count">QUESTION ${state.questionIndex + 1} <span>OF 3</span></div></div>
-        <div class="question-content">
-          <h1 id="question-title">${escapeHTML(q.prompt)}</h1>
-          <p class="question-hint">Select one. Edit, add or remove options to make them yours.</p>
-          <div class="options-list" role="radiogroup" aria-labelledby="question-title">${optionMarkup}</div>
-          <button type="button" class="add-option" data-action="add-option"><span aria-hidden="true">＋</span> Add an option</button>
-          <label class="notes-field"><span>A note (optional)</span><textarea maxlength="240" placeholder="Add a detail you want Forma to keep in mind…">${escapeHTML(answer.note)}</textarea></label>
-        </div>
-        <div class="demo-footer">
-          <button class="quiet-button" type="button" data-action="skip">Skip · use the suggested choice <span aria-hidden="true">›</span></button>
-          <div class="footer-actions">
-            <button class="back-button" type="button" data-action="back-question"><span aria-hidden="true">←</span> Back</button>
-            <button class="primary-button" type="button" data-action="next-question" ${chosen ? "" : "disabled"}>${state.questionIndex === 2 ? "Choose layouts" : "Next"} <span class="arrow" aria-hidden="true">→</span></button>
-          </div>
-        </div>
-      </section>`;
-  }
-
-  /* ---- Mini website thumbnails used on the compare screen ---- */
-  function renderPreview(stage) {
-    const offer = escapeHTML(offerText());
-    const action = escapeHTML(answerText(1));
-    const policy = escapeHTML(answerText(2));
-    if (stage === "home") {
-      return `<div class="preview-frame"><div class="preview-top"><span>Your business</span><small>Home</small></div><div class="mini-home"><div class="mini-home-copy"><strong class="mini-headline">${offer}</strong><span class="mini-text">A clear introduction to your business and what comes next.</span><span class="mini-cta">${action}</span></div><div class="mini-art" aria-hidden="true"></div></div></div>`;
-    }
-    if (stage === "service") {
-      return `<div class="preview-frame"><div class="preview-top"><span>Your business</span><small>Offer</small></div><div class="mini-service"><div class="service-illustration" aria-hidden="true"></div><div class="mini-service-copy"><strong class="mini-service-title">${offer}</strong><span class="mini-price">Your price</span><div class="mini-rules" aria-hidden="true"><i></i><i></i><i></i></div><span class="mini-cta">${action}</span></div></div></div>`;
-    }
-    return `<div class="preview-frame"><div class="preview-top"><span>Your business</span><small>Checkout</small></div><div class="preview-checkout"><div class="checkout-intro"><strong>Review your choice</strong><small>Confirm the details before continuing.</small></div><div class="checkout-box"><div class="checkout-box-title">Order summary</div><div class="checkout-box-row"><span>${offer}</span><b>Your price</b></div><div class="checkout-box-row"><span>Policy</span><span>${policy}</span></div><div class="fake-input">${action}</div><div class="fake-submit" aria-hidden="true"></div></div></div></div>`;
-  }
-
-  /* ---- Screen 3: pick between two layouts, three times ---- */
-  function renderCompare() {
-    const stage = layoutStages[state.compareIndex];
-    const cards = stage.layouts.map((layout, index) => {
-      const selected = state.choices[stage.id] === layout.id;
-      const variant = [
-        stage.id === "home" && index === 1 ? "preview-home-split" : "",
-        stage.id === "service" && index === 1 ? "preview-service-brief" : "",
-        stage.id === "checkout" ? `checkout-layout${index === 1 ? " is-compact" : ""}` : "",
-      ].join(" ");
-      return `<button type="button" class="layout-choice ${selected ? "is-selected" : ""}" role="radio" aria-checked="${selected}" data-action="select-layout" data-stage="${stage.id}" data-layout="${layout.id}">
-        <div class="preview"><span class="layout-index">Option ${index + 1}</span><span class="layout-selected ${selected ? "visible" : ""}">✓ Selected</span>
-          <div class="${variant}" style="height:100%">${renderPreview(stage.id)}</div>
-        </div>
-        <div class="layout-copy"><h2>${layout.name}</h2><p>${layout.description}</p></div>
-      </button>`;
-    }).join("");
-    main.innerHTML = `
-      <section class="workspace compare-workspace" aria-labelledby="compare-title">
-        <div class="step-heading"><p class="step-why">${stage.label}</p><div class="step-count">PAGE ${state.compareIndex + 1} <span>OF 3</span></div></div>
-        <div class="compare-heading"><div><h1 id="compare-title">${stage.title}</h1><p>${stage.intro}</p></div><div class="offer-chip"><span>Your offer</span><strong>${escapeHTML(offerText())}</strong></div></div>
-        <div class="layout-options" role="radiogroup" aria-label="Choose a ${stage.id} layout">${cards}</div>
-        <div class="demo-footer">
-          <button class="back-button" type="button" data-action="back-compare"><span aria-hidden="true">←</span> Back</button>
-          <div class="footer-actions"><button class="primary-button" type="button" data-action="next-compare" ${state.choices[stage.id] ? "" : "disabled"}>${state.compareIndex === 2 ? "Create my website" : "Next page"} <span class="arrow" aria-hidden="true">→</span></button></div>
-        </div>
-      </section>`;
-  }
-
-  /* ---- The sample website shown on the final screen ---- */
-  function sitePage() {
-    const offer = escapeHTML(offerText());
-    const action = escapeHTML(answerText(1));
-    const policy = escapeHTML(answerText(2));
-    const offerNote = noteText(0), actionNote = noteText(1), policyNote = noteText(2);
-    const note = (t) => t ? `<p class="user-note">${escapeHTML(t)}</p>` : "";
-    if (state.draftPage === "home") {
-      const layout = state.choices.home === "home-split" ? "site-layout-home-split" : "site-layout-home-welcome";
-      return `<section class="site-page site-home ${layout}"><div class="site-home-copy"><h2>${offer}</h2><p>Your business, introduced in your words. Give people a clear sense of what you offer and an easy way to take the next step.</p>${note(offerNote)}<button class="site-cta" type="button" data-action="draft-nav" data-page="service">${action} <span aria-hidden="true">→</span></button></div><div class="site-art" aria-hidden="true"></div></section>`;
-    }
-    if (state.draftPage === "service") {
-      const layout = state.choices.service === "service-brief" ? "site-layout-service-brief" : "site-layout-service-story";
-      return `<section class="site-page site-service ${layout}"><div class="service-art" aria-hidden="true"></div><div class="service-copy"><h2>${offer}</h2><p>A place to explain the details in a way that feels right for your business. Keep the essentials together, and make the next step easy to find.</p><div class="service-facts"><div><span>Price</span><strong>Your price</strong></div><div><span>Next step</span><strong>${action}</strong></div></div><div class="policy-note"><span>Cancellation policy</span><p>${policy}</p></div>${note(offerNote)}${note(actionNote)}${note(policyNote)}<button class="site-cta" type="button" data-action="draft-nav" data-page="checkout">${action} <span aria-hidden="true">→</span></button></div></section>`;
-    }
-    const compact = state.choices.checkout === "checkout-compact";
-    return `<section class="site-page site-checkout ${compact ? "checkout-compact" : "checkout-guided"}"><div class="checkout-intro"><h2>Review your choice.</h2><p>This sample shows a possible next step. It does not collect information or take payment.</p>${note(actionNote)}</div><div class="checkout-card"><div class="checkout-card-head"><span>Your summary</span><span class="sample-pill">Demo</span></div><div class="checkout-detail"><span>Offer</span><strong>${offer}</strong></div><div class="checkout-detail"><span>Price</span><strong>Your price</strong></div><div class="checkout-detail"><span>Next step</span><strong>${action}</strong></div><div class="checkout-detail"><span>Cancellation policy</span><strong>${policy}</strong></div><button class="checkout-disabled" type="button" disabled>Payments are disabled in this demo</button></div></section>`;
-  }
-
-  /* ---- Screen 4: the finished draft. Reaching this = demo "done". ---- */
-  function renderDraft() {
-    const labels = { home: "Home", service: "Offer", checkout: "Checkout" };
-    main.innerHTML = `
-      <section class="draft-workspace" aria-labelledby="draft-title">
-        <div class="draft-heading"><div><h1 id="draft-title">A first look at your website.</h1><p>Your selections, brought together in a local demo draft. Nothing was published.</p></div><button class="review-button" type="button" data-action="review"><span aria-hidden="true">←</span> Review choices</button></div>
-        <div class="browser">
-          <div class="browser-bar"><span class="browser-dots" aria-hidden="true"><i></i><i></i><i></i></span><span>your-business.example</span><span></span></div>
-          <nav class="draft-nav" aria-label="Sample website pages"><span class="draft-brand">Your business</span><div class="draft-nav-links">${Object.keys(labels).map((p) => `<button type="button" class="${state.draftPage === p ? "active" : ""}" aria-current="${state.draftPage === p ? "page" : "false"}" data-action="draft-nav" data-page="${p}">${labels[p]}</button>`).join("")}</div></nav>
-          ${sitePage()}
-          <footer class="draft-site-footer"><span>Your business</span><span>Made with Forma</span></footer>
-        </div>
-        <div class="draft-bottom">
-          <div class="reflection"><span class="reflection-mark" aria-hidden="true">✓</span><span><strong>Your direction is taking shape.</strong> ${escapeHTML(offerText())} · ${escapeHTML(answerText(1))} · ${escapeHTML(answerText(2))}<br><span class="reflection-layouts">${escapeHTML(selectedLayoutSummary())}</span></span></div>
-          <div class="footer-actions">
-            <button class="restart-button" type="button" data-action="restart">Start over <span aria-hidden="true">↺</span></button>
-            <!-- Hands control back to the slideshow -->
-            <button class="primary-button" type="button" data-action="continue">Build my site <span class="arrow" aria-hidden="true">→</span></button>
-          </div>
-        </div>
-      </section>`;
-  }
-
-  /* ---- Render whichever screen we're on, then tell the slideshow ---- */
-  function render() {
-    setProgress();
-    if (state.page === "intro") renderIntro();
-    if (state.page === "questions") renderQuestion();
-    if (state.page === "compare") renderCompare();
-    if (state.page === "draft") renderDraft();
-    main.scrollTop = 0;
-    document.dispatchEvent(new CustomEvent("formademo:change", { detail: { page: state.page } }));
-  }
-  function setPage(page) { state.page = page; render(); main.focus({ preventScroll: true }); }
-
-  function resetDemo() {
-    Object.assign(state, {
-      page: "intro", questionIndex: 0, compareIndex: 0, choices: {}, draftPage: "home",
-      answers: questions.map(() => ({ selected: null, note: "" })),
-      options: freshOptions(),
-    });
-    render();
-    main.focus({ preventScroll: true });
-  }
-
-  function startDemo() {
-    // Pre-select the first option of every question so "Next" works immediately
-    state.answers = questions.map((q, i) => ({ selected: state.options[i][0]?.id || null, note: "" }));
-    state.questionIndex = 0;
-    setPage("questions");
-  }
-
-  function goQuestion(index) {
-    state.questionIndex = Math.max(0, Math.min(questions.length - 1, index));
-    setPage("questions");
-  }
-
-  /* ---- Typing in option fields / notes ---- */
-  main.addEventListener("input", (e) => {
-    const t = e.target;
-    if (t.matches(".option-text")) {
-      const opt = state.options[state.questionIndex].find((o) => o.id === t.dataset.optionId);
-      if (opt) opt.text = t.value;
-    } else if (t.matches("textarea")) {
-      state.answers[state.questionIndex].note = t.value;
-    }
-  });
-
-  /* ---- Choosing a radio option ---- */
-  main.addEventListener("change", (e) => {
-    if (e.target.matches('input[type="radio"]')) {
-      state.answers[state.questionIndex].selected = e.target.value;
-      renderQuestion();
-      main.querySelector(`input[type="radio"][value="${CSS.escape(e.target.value)}"]`)?.focus({ preventScroll: true });
-    }
-  });
-
-  /* ---- All button clicks (data-action="...") ---- */
-  main.addEventListener("click", (e) => {
-    const button = e.target.closest("[data-action]");
-    if (!button || button.disabled) return;
-    const action = button.dataset.action;
-    const qi = state.questionIndex;
-
-    if (action === "start") startDemo();
-    else if (action === "add-option") {
-      const id = `custom-${Date.now()}`;
-      state.options[qi].push({ id, text: "" });
-      renderQuestion();
-      main.querySelector(`.option-text[data-option-id="${CSS.escape(id)}"]`)?.focus();
-    } else if (action === "remove-option") {
-      const list = state.options[qi];
-      if (list.length <= 1) return;
-      const removed = list.findIndex((o) => o.id === button.dataset.optionId);
-      list.splice(removed, 1);
-      if (state.answers[qi].selected === button.dataset.optionId) state.answers[qi].selected = list[Math.max(0, removed - 1)].id;
-      renderQuestion();
-    } else if (action === "skip" || action === "next-question") {
-      if (action === "skip" && !state.answers[qi].selected) state.answers[qi].selected = state.options[qi][0]?.id || null;
-      if (qi < 2) goQuestion(qi + 1);
-      else { state.compareIndex = 0; setPage("compare"); }
-    } else if (action === "back-question") {
-      if (qi === 0) setPage("intro"); else goQuestion(qi - 1);
-    } else if (action === "select-layout") {
-      state.choices[button.dataset.stage] = button.dataset.layout;
-      renderCompare();
-      main.querySelector(`[data-layout="${CSS.escape(button.dataset.layout)}"]`)?.focus({ preventScroll: true });
-    } else if (action === "back-compare") {
-      if (state.compareIndex === 0) goQuestion(2);
-      else { state.compareIndex -= 1; setPage("compare"); }
-    } else if (action === "next-compare") {
-      if (state.compareIndex < 2) { state.compareIndex += 1; setPage("compare"); }
-      else { state.draftPage = "home"; setPage("draft"); }
-    } else if (action === "draft-nav") {
-      state.draftPage = button.dataset.page;
-      renderDraft();
-    } else if (action === "review") goQuestion(0);
-    else if (action === "restart") resetDemo();
-    else if (action === "continue") document.dispatchEvent(new CustomEvent("formademo:continue"));
-  });
-
-  restartTop.addEventListener("click", resetDemo);
-  render();
-
-  /* Public API used by the slideshow */
-  return {
-    get page() { return state.page; },
-    isRunning: () => state.page === "questions" || state.page === "compare",
-    isFinished: () => state.page === "draft",
-    start: startDemo,
-    reset: resetDemo,  // the slideshow calls this every time you arrive on the demo slide
-  };
-})();
 
 
 /* ============================================================================
-   7. DECK SCRIPT — slideshow navigation
+   6. DECK SCRIPT — slideshow navigation
    ========================================================================== */
 (() => {
   const deck = document.getElementById("deck");
@@ -1044,9 +518,19 @@ window.FormaDemo = (() => {
   window.addEventListener("resize", fitDeck);
   fitDeck();
 
-  /* Is the slideshow paused because the demo is mid-walkthrough? */
   const onDemoSlide = () => slides[current].hasAttribute("data-demo");
-  const navLocked = () => onDemoSlide() && FormaDemo.isRunning();
+
+  /* ---- Embedded demo site ---- */
+  const demoFrame = document.getElementById("demo-frame");
+  const DEMO_SRC = demoFrame.getAttribute("src");
+  // Reload the site so it always starts from its first page
+  const resetDemo = () => { demoFrame.src = "about:blank"; demoFrame.src = DEMO_SRC; };
+  // When the pointer leaves the site, take the keyboard back from it so the
+  // arrow keys move slides again. (Keys pressed *inside* the site never reach
+  // this page — browsers keep them in the frame.)
+  demoFrame.addEventListener("mouseleave", () => {
+    if (document.activeElement === demoFrame) { demoFrame.blur(); window.focus(); }
+  });
 
   /* Typewriter effect for the blank-prompt slides (data-type="...") */
   let typingTimer = null;
@@ -1069,14 +553,14 @@ window.FormaDemo = (() => {
     // Same data-group on both slides → swap instantly, no cross-fade
     const sameGroup = from !== slide && from.dataset.group && from.dataset.group === slide.dataset.group;
     deck.classList.toggle("instant", Boolean(sameGroup));
-    // Arriving at the demo slide always starts the demo fresh
-    if (slide.hasAttribute("data-demo") && from !== slide) FormaDemo.reset();
+    // Leaving the demo slide reloads the site, so it's fresh next visit
+    if (from.hasAttribute("data-demo") && from !== slide) resetDemo();
     from.classList.remove("is-active");
     current = i;
     slide.classList.add("is-active");
     slide.querySelectorAll(".typed").forEach(typeInto);
     history.replaceState(null, "", `#${current + 1}`);
-    document.title = `Forma · ${slide.dataset.title || current + 1}`;
+    document.title = `staso · ${slide.dataset.title || current + 1}`;
     updateChrome();
   }
   const next = () => go(current + 1);
@@ -1084,9 +568,8 @@ window.FormaDemo = (() => {
 
   function updateChrome() {
     count.textContent = `${current + 1} / ${slides.length}`;
-    document.body.classList.toggle("demo-locked", navLocked());
-    prevBtn.disabled = current === 0 || navLocked();
-    nextBtn.disabled = current === slides.length - 1 || navLocked();
+    prevBtn.disabled = current === 0;
+    nextBtn.disabled = current === slides.length - 1;
   }
 
   /* ---- Keyboard ---- */
@@ -1103,21 +586,6 @@ window.FormaDemo = (() => {
       return;
     }
 
-    /* Demo slide rules */
-    if (onDemoSlide()) {
-      if (FormaDemo.isRunning()) {
-        // Demo in progress: slide keys do nothing. Escape = skip to next slide.
-        if (key === "Escape") next();
-        return;
-      }
-      if (FormaDemo.page === "intro" && ["ArrowRight", "PageDown"].includes(key)) {
-        // "Next" on the demo's start screen starts the demo instead of skipping it
-        e.preventDefault();
-        FormaDemo.start();
-        return;
-      }
-    }
-
     if (typing) return;                                  // never hijack text fields
     if (onButton && (key === " " || key === "Enter")) return; // let buttons click
 
@@ -1129,16 +597,12 @@ window.FormaDemo = (() => {
 
   /* ---- Click anywhere on a normal slide to advance ---- */
   deck.addEventListener("click", (e) => {
-    if (onDemoSlide()) return; // clicks belong to the demo there
+    if (onDemoSlide()) return; // a stray click beside the site shouldn't skip it
     next();
   });
 
   prevBtn.addEventListener("click", prev);
   nextBtn.addEventListener("click", next);
-
-  /* ---- Demo ↔ slideshow handoff ---- */
-  document.addEventListener("formademo:change", updateChrome);
-  document.addEventListener("formademo:continue", next);
 
   /* ---- Show the nav controls briefly when the mouse moves ---- */
   let hideTimer;
