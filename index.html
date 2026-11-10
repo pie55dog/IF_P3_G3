@@ -178,6 +178,13 @@ body.show-nav .deck-nav { opacity: 1; }
 
 /* -- Slides 1 & 2: landscape photo ------------------------------------------ */
 .s-photo { position: absolute; left: -61px; top: -491px; width: 2032px; height: 1900px; object-fit: cover; }
+/* Slide 1: framed snapshot, white 26px border like a printed photo */
+.s-snapshot {
+  position: absolute; left: 1200px; top: 132px;
+  width: 570px; height: 816px; box-sizing: border-box;
+  border: 26px solid #fff;
+  object-fit: cover; object-position: 100% 50%;
+}
 /* Slide 2: the brand reveal "dissolves" in over the photo */
 .s-reveal {
   position: absolute; left: 0; right: 0; top: 365px;
@@ -352,9 +359,11 @@ body.show-nav .deck-nav { opacity: 1; }
      ======================================================================= -->
 <main class="deck" id="deck" aria-live="polite">
 
-  <!-- 1 · Opening photo -->
+  <!-- 1 · Opening photo — valley landscape with a framed snapshot of the
+       team at the farm on the right (Figma node 112:456) -->
   <section class="slide" data-title="Opening">
     <img class="s-photo" src="assets/landscape.jpg" alt="Orchards and hills in a farming valley">
+    <img class="s-snapshot anim" style="--d: 300ms" src="assets/farm-portrait.jpg" alt="Two team members holding shovels on a farm">
   </section>
 
   <!-- 2 · Introducing staso — the photo from slide 1 fades to white
