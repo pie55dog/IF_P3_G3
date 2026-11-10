@@ -66,6 +66,8 @@
   /* How large the embedded demo site renders inside its slide. Raise to make
      the site's text bigger; lower to fit more of the site on screen. */
   --demo-zoom: 1.3;
+  /* Width of the slide border left around the embedded demo site */
+  --demo-inset: 18px;
 }
 
 /* ============================================================================
@@ -170,6 +172,7 @@ body.show-nav .deck-nav { opacity: 1; }
 @media (prefers-reduced-motion: reduce) {
   .slide, .slide.is-active { transition: none; }
   .anim, .slide.is-active .anim { animation: none; opacity: 1; transform: none; }
+  .s-reversal .em::after, .s-close-ul::after { animation: none !important; transform: none; }
 }
 
 /* ============================================================================
@@ -213,7 +216,11 @@ body.show-nav .deck-nav { opacity: 1; }
   content: ""; position: absolute; z-index: -1;
   left: 0; right: 0; bottom: -3px; height: 18px;
   border-radius: 9px; background: var(--peach);
+  transform: scaleX(0); transform-origin: left;   /* starts undrawn */
 }
+/* Draws in left→right after "AI prompts you." fades up */
+.slide.is-active .s-reversal .em::after { animation: draw-line .7s cubic-bezier(.2,.7,.2,1) 900ms forwards; }
+@keyframes draw-line { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 
 /* -- Slides 4–7: the blank prompt ---------------------------------------------- */
 .s-prompt {
@@ -297,20 +304,20 @@ body.show-nav .deck-nav { opacity: 1; }
 .s-legend { position: absolute; left: 96px; top: 974px; font: 15px var(--font-mono); letter-spacing: .5px; color: var(--label); opacity: .75; white-space: pre; }
 
 /* -- Slide 11: demo — panel styles are in section 4 ---------------------------- */
-.s-demo-title { top: 137px; font-size: 76px; }
 
 /* -- Slide 12: closing --------------------------------------------------------- */
 .s-close-1 { top: 225px; font-size: 88px; line-height: 1.17; }
 .s-close-2 { top: 495px; font-size: 110px; line-height: 1.19; color: var(--navy); }
 /* Peach underline under "what to ask." — sized to the words, and it only
-   fades in after the line has appeared. Raise `bottom` to move it up. */
+   draws in after the line has appeared. Raise `bottom` to move it up. */
 .s-close-ul { position: relative; display: inline-block; }
 .s-close-ul::after {
   content: ""; position: absolute; left: 0; right: 0; bottom: 4px; height: 14px;
-  border-radius: 7px; background: var(--peach); opacity: 0;
+  border-radius: 7px; background: var(--peach);
+  transform: scaleX(0); transform-origin: left;   /* starts undrawn */
 }
-.slide.is-active .s-close-ul::after { animation: ul-in .5s ease 1.4s forwards; }
-@keyframes ul-in { to { opacity: 1; } }
+/* Draws in left→right once "what to ask." has appeared */
+.slide.is-active .s-close-ul::after { animation: draw-line .7s cubic-bezier(.2,.7,.2,1) 1.3s forwards; }
 .s-close-note { position: absolute; left: 96px; top: 875px; margin: 0; font: 400 30px var(--font-sans); color: var(--muted); }
 
 /* ============================================================================
@@ -319,14 +326,12 @@ body.show-nav .deck-nav { opacity: 1; }
    the SLIDE MARKUP (search "DEMO_URL") to point the demo somewhere else.
    ========================================================================== */
 .demo {
-  /* Panel position on the 1920×1080 slide */
-  position: absolute; left: 96px; top: 250px;
-  width: 1728px; height: 790px;
+  /* Fills the whole 1920×1080 slide except a thin border of background */
+  position: absolute; inset: var(--demo-inset);
   overflow: hidden;
-  border: 1px solid rgb(255 255 255 / .85);
-  border-radius: 24px;
+  border-radius: 14px;
   background: #fff;
-  box-shadow: 0 30px 60px -40px rgb(0 4 86 / .35);
+  box-shadow: 0 20px 50px -30px rgb(0 4 86 / .45);
 }
 /* The site renders inside a virtual window --demo-zoom times smaller and is
    then scaled back up, so its text reads at presentation size. */
@@ -467,14 +472,13 @@ body.show-nav .deck-nav { opacity: 1; }
     <div class="s-legend">✓ Supported   – Not assessed</div>
   </section>
 
-  <!-- 11 · DEMO — the live web app, embedded.
+  <!-- 11 · DEMO — the live web app, embedded full-slide (only a thin strip
+       of the slide background shows around it; set by --demo-inset).
        DEMO_URL: change the src below to embed a different site.
        Arrow keys go to the next/previous slide as usual. If you click into the
        site, it takes the keyboard; move the mouse off the site (or click the
        slide around it) and the arrow keys drive the slides again. -->
   <section class="slide" data-title="Demo" data-demo>
-    <header class="s-header"><span class="logo"><span class="logo-word">staso</span><svg class="logo-mark" aria-hidden="true"><use href="#staso-mark"/></svg></span></header>
-    <h1 class="s-title s-demo-title">Demo</h1>
     <div class="demo">
       <iframe id="demo-frame" src="https://ai-prompts-you-webapp.replit.app/" title="staso live demo"
               allow="clipboard-write; fullscreen" referrerpolicy="no-referrer-when-downgrade"></iframe>
