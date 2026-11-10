@@ -9,11 +9,12 @@
   HOW IT BEHAVES
     • → / Space / PageDown / click = next, ← / PageUp = back.
       F = fullscreen. Home / End = first / last slide.
-    • Demo slide: shows the live site (https://ai-prompts-you-webapp.replit.app/)
-      in a frame. Arrow keys still move between slides. Clicking into the
-      site hands it the keyboard; move the mouse off the site and the arrow
-      keys drive the slides again.
-    • The site reloads to its start page every time you arrive on its slide.
+    • Demo slide: a click-through recording of the live app
+      (https://ai-prompts-you-webapp.replit.app/) for Anand Family Farm,
+      kept in ./demo. Each → plays the next step of the walkthrough; after
+      the last step, → goes to the next slide. ← steps back the same way.
+      It starts from the beginning every time you arrive on the slide.
+      To change the walkthrough, edit STEPS in demo/index.html.
 
   FILE LAYOUT (search for these headings)
     1. DESIGN TOKENS        – colors, fonts, demo size. Change brand here.
@@ -173,6 +174,7 @@ body.show-nav .deck-nav { opacity: 1; }
   .slide, .slide.is-active { transition: none; }
   .anim, .slide.is-active .anim { animation: none; opacity: 1; transform: none; }
   .s-reversal .em::after, .s-close-ul::after { animation: none !important; transform: none; }
+  .s-reveal .logo-mark, .s-reveal .logo-word { animation: none !important; opacity: 1; transform: none; clip-path: none; }
 }
 
 /* ============================================================================
@@ -203,7 +205,15 @@ body.show-nav .deck-nav { opacity: 1; }
 /* Slides that share a data-group (the four blank-prompt slides) swap
    instantly instead of cross-fading, so only the typed text changes. */
 .deck.instant .slide { transition: none; }
-.slide.is-active .s-reveal.anim { animation-duration: 1.4s; }
+
+/* Big-logo animation (slides 2 and 13). --d on .s-reveal sets the start.
+   1) the mark spins and pops in;  2) "staso" slides out from behind it. */
+.s-reveal .logo-mark { position: relative; z-index: 1; opacity: 0; transform: scale(.3) rotate(-200deg); }
+.s-reveal .logo-word { opacity: 0; clip-path: inset(-.3em -.3em -.3em 100%); transform: translate(.5em, -.04em); }
+.slide.is-active .s-reveal .logo-mark { animation: mark-in .9s cubic-bezier(.34,1.45,.64,1) var(--d, 0ms) forwards; }
+.slide.is-active .s-reveal .logo-word { animation: word-in .8s cubic-bezier(.2,.7,.2,1) calc(var(--d, 0ms) + 550ms) forwards; }
+@keyframes mark-in { to { opacity: 1; transform: none; } }
+@keyframes word-in { to { opacity: 1; clip-path: inset(-.3em -.3em -.3em -.3em); transform: translate(0, -.04em); } }
 
 /* -- Slide 3: the reversal ----------------------------------------------------- */
 .s-reversal { position: absolute; left: 96px; top: 280px; margin: 0; font: 700 126px/129.78px var(--font-sans); letter-spacing: -.04em; }
@@ -374,7 +384,7 @@ body.show-nav .deck-nav { opacity: 1; }
   <!-- 2 · Introducing staso — the photo from slide 1 fades to white
        (via the normal cross-fade) and the logo fades in on top -->
   <section class="slide" data-title="Introducing staso">
-    <div class="s-reveal anim" style="--d: 300ms">
+    <div class="s-reveal" style="--d: 300ms">
       <span class="logo" role="img" aria-label="staso"><span class="logo-word">staso</span><svg class="logo-mark" aria-hidden="true"><use href="#staso-mark"/></svg></span>
     </div>
   </section>
@@ -472,16 +482,13 @@ body.show-nav .deck-nav { opacity: 1; }
     <div class="s-legend">✓ Supported   – Not assessed</div>
   </section>
 
-  <!-- 11 · DEMO — the live web app, embedded full-slide (only a thin strip
-       of the slide background shows around it; set by --demo-inset).
-       DEMO_URL: change the src below to embed a different site.
-       Arrow keys go to the next/previous slide as usual. If you click into the
-       site, it takes the keyboard; move the mouse off the site (or click the
-       slide around it) and the arrow keys drive the slides again. -->
+  <!-- 11 · DEMO — click-through walkthrough of the real app (see demo/index.html),
+       full-slide with a thin strip of slide background around it (--demo-inset).
+       → / ← step through the walkthrough, then carry on to the next/previous slide.
+       To show the live site instead, set src to https://ai-prompts-you-webapp.replit.app/ -->
   <section class="slide" data-title="Demo" data-demo>
     <div class="demo">
-      <iframe id="demo-frame" src="https://ai-prompts-you-webapp.replit.app/" title="staso live demo"
-              allow="clipboard-write; fullscreen" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      <iframe id="demo-frame" src="demo/index.html" title="staso demo walkthrough"></iframe>
     </div>
   </section>
 
@@ -494,7 +501,7 @@ body.show-nav .deck-nav { opacity: 1; }
 
   <!-- 13 · Final slide — just the logo, centered on white -->
   <section class="slide" data-title="staso">
-    <div class="s-reveal is-centered anim" style="--d: 200ms">
+    <div class="s-reveal is-centered" style="--d: 200ms">
       <span class="logo" role="img" aria-label="staso"><span class="logo-word">staso</span><svg class="logo-mark" aria-hidden="true"><use href="#staso-mark"/></svg></span>
     </div>
   </section>
@@ -533,17 +540,9 @@ body.show-nav .deck-nav { opacity: 1; }
 
   const onDemoSlide = () => slides[current].hasAttribute("data-demo");
 
-  /* ---- Embedded demo site ---- */
+  /* ---- Demo walkthrough (demo/index.html exposes window.DemoPlayer) ---- */
   const demoFrame = document.getElementById("demo-frame");
-  const DEMO_SRC = demoFrame.getAttribute("src");
-  // Reload the site so it always starts from its first page
-  const resetDemo = () => { demoFrame.src = "about:blank"; demoFrame.src = DEMO_SRC; };
-  // When the pointer leaves the site, take the keyboard back from it so the
-  // arrow keys move slides again. (Keys pressed *inside* the site never reach
-  // this page — browsers keep them in the frame.)
-  demoFrame.addEventListener("mouseleave", () => {
-    if (document.activeElement === demoFrame) { demoFrame.blur(); window.focus(); }
-  });
+  const player = () => { try { return demoFrame.contentWindow.DemoPlayer; } catch { return null; } };
 
   /* Typewriter effect for the blank-prompt slides (data-type="...") */
   let typingTimer = null;
@@ -566,8 +565,8 @@ body.show-nav .deck-nav { opacity: 1; }
     // Same data-group on both slides → swap instantly, no cross-fade
     const sameGroup = from !== slide && from.dataset.group && from.dataset.group === slide.dataset.group;
     deck.classList.toggle("instant", Boolean(sameGroup));
-    // Leaving the demo slide reloads the site, so it's fresh next visit
-    if (from.hasAttribute("data-demo") && from !== slide) resetDemo();
+    // Arriving at the demo slide always starts the walkthrough from step 1
+    if (slide.hasAttribute("data-demo") && from !== slide) player()?.reset();
     from.classList.remove("is-active");
     current = i;
     slide.classList.add("is-active");
@@ -578,6 +577,8 @@ body.show-nav .deck-nav { opacity: 1; }
   }
   const next = () => go(current + 1);
   const prev = () => go(current - 1);
+  // The demo page calls these when a key pressed inside it runs past its ends
+  window.Deck = { next, prev };
 
   function updateChrome() {
     count.textContent = `${current + 1} / ${slides.length}`;
@@ -602,15 +603,26 @@ body.show-nav .deck-nav { opacity: 1; }
     if (typing) return;                                  // never hijack text fields
     if (onButton && (key === " " || key === "Enter")) return; // let buttons click
 
-    if (["ArrowRight", "ArrowDown", "PageDown", " "].includes(key)) { e.preventDefault(); next(); }
-    else if (["ArrowLeft", "ArrowUp", "PageUp"].includes(key)) { e.preventDefault(); prev(); }
+    const fwd = ["ArrowRight", "ArrowDown", "PageDown", " "].includes(key);
+    const back = ["ArrowLeft", "ArrowUp", "PageUp"].includes(key);
+    // On the demo slide, arrows drive the walkthrough first
+    if ((fwd || back) && onDemoSlide() && player()) {
+      e.preventDefault();
+      (async () => {
+        const moved = fwd ? await player().next() : player().prev();
+        if (!moved) fwd ? next() : prev();
+      })();
+      return;
+    }
+    if (fwd) { e.preventDefault(); next(); }
+    else if (back) { e.preventDefault(); prev(); }
     else if (key === "Home") go(0);
     else if (key === "End") go(slides.length - 1);
   });
 
   /* ---- Click anywhere on a normal slide to advance ---- */
   deck.addEventListener("click", (e) => {
-    if (onDemoSlide()) return; // a stray click beside the site shouldn't skip it
+    if (onDemoSlide()) return; // clicks don't skip the walkthrough; use the arrow keys
     next();
   });
 

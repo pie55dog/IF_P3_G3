@@ -1,0 +1,214 @@
+<!doctype html>
+<!--
+  ============================================================================
+  STASO CLICK-THROUGH DEMO
+  ============================================================================
+  A pre-recorded walkthrough of the live app
+  (https://ai-prompts-you-webapp.replit.app/) for "Anand Family Farm".
+  Every screen in ./screens is a real page captured from that app, so it
+  looks exactly like the product, but nothing has to load or be typed live.
+
+  KEYS (when shown inside the deck, the deck passes its arrow keys in here)
+    → / Space / PageDown   next step (plays the "click", then shows the result)
+    ← / PageUp             previous step
+  At the last step, → moves the deck on to the next slide.
+
+  TO EDIT THE SCRIPT: change STEPS below. Each step is one press of →.
+    screen  – file in ./screens (without .html)
+    click   – text of the thing "clicked" on this screen before moving on.
+              A ripple plays on it, then the next step appears.
+    type    – { text } types into the screen's text box when the step opens
+    scroll  – scrolls the page to this many px when the step opens (smoothly)
+  ============================================================================
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>staso demo · Anand Family Farm</title>
+<style>
+  html, body { margin: 0; height: 100%; overflow: hidden; background: #eef0f7; }
+  /* Every screen is preloaded in its own frame; only the active one shows. */
+  .screen {
+    position: absolute; inset: 0; width: 100%; height: 100%; border: 0;
+    opacity: 0; visibility: hidden;
+    transition: opacity .35s ease, visibility 0s linear .35s;
+    pointer-events: none;            /* click-through demo: keys only */
+  }
+  .screen.on { opacity: 1; visibility: visible; transition: opacity .35s ease; }
+  /* The "click" ripple drawn over the screen */
+  .tap {
+    position: absolute; width: 56px; height: 56px; margin: -28px 0 0 -28px;
+    border-radius: 50%; pointer-events: none; z-index: 5;
+    background: rgb(0 4 86 / .18); border: 3px solid rgb(0 4 86 / .55);
+    animation: tap .55s ease-out forwards;
+  }
+  @keyframes tap { from { transform: scale(.3); opacity: 1; } to { transform: scale(1.5); opacity: 0; } }
+</style>
+</head>
+<body>
+<script>
+"use strict";
+
+/* ---- The script: one entry per press of → (about one minute in total) ---- */
+const STEPS = [
+  // Landing page
+  { screen: "00-landing",              click: "Start the interview" },
+  // 1 · Your business (one real question, then the name, then the offer)
+  { screen: "01-biz-q1",               click: "I grow or make food" },
+  { screen: "02-biz-q1-picked",        click: "Next" },
+  { screen: "03-biz-name",             click: "Add your own answer" },
+  { screen: "04-biz-name-typed",       type: { text: "Anand Family Farm" } },
+  { screen: "05-biz-name-picked",      click: "Next" },
+  { screen: "06-biz-offer",            click: "See what we learned" },
+  { screen: "07-biz-loading" },
+  { screen: "08-biz-summary",          click: "Start the feature survey" },
+  // 2 · Survey: one blind-spot question
+  { screen: "11-survey-blind",         click: "Pause it" },
+  { screen: "12-survey-blind-picked",  click: "Next" },
+  { screen: "13-survey-done",          click: "Start the eye exam" },
+  // 3 · Eye exam (the long part): homepage, product page, checkout
+  { screen: "14-eye-home",             click: "Offer first" },
+  { screen: "15-eye-home-r2",          click: "Offer first" },
+  { screen: "16-eye-product-r1",       click: "Gallery" },
+  { screen: "17-eye-product-r2",       click: "Gallery" },
+  { screen: "18-eye-checkout-c1",      click: "1 looks better" },
+  { screen: "18-eye-checkout-c2",      click: "1 looks better" },
+  { screen: "18-eye-checkout-c4",      click: "1 looks better" },
+  { screen: "18-eye-checkout-c5",      click: "1 looks better" },
+  { screen: "20-eye-favorites-picked", click: "These are my two" },
+  { screen: "23-eye-result",           click: "Review & create" },
+  // 4 · The website
+  { screen: "24-summary",              click: "Create my website" },
+  { screen: "26-site-home" },
+  { screen: "26-site-home",            scroll: 570 },
+  { screen: "28-site-product",         click: "Checkout" },
+  { screen: "29-site-checkout" },
+];
+/* Scroll position each screen was captured at (window scroll) */
+const SCROLL = {
+  "15-eye-home-r2": 53, "16-eye-product-r1": 53, "17-eye-product-r2": 53,
+  "18-eye-checkout-c1": 53, "18-eye-checkout-c2": 53, "18-eye-checkout-c4": 53,
+  "18-eye-checkout-c5": 53, "20-eye-favorites-picked": 53,
+};
+
+/* ---- Build one preloaded frame per screen ---- */
+const frames = {};
+for (const name of new Set(STEPS.map(s => s.screen))) {
+  const f = document.createElement("iframe");
+  f.className = "screen"; f.tabIndex = -1; f.setAttribute("aria-hidden", "true");
+  f.src = `screens/${name}.html`;
+  f.addEventListener("load", () => prepare(f, name));
+  document.body.appendChild(f);
+  frames[name] = f;
+}
+
+/* Put a captured screen back exactly as it was: scroll positions + no caret */
+function prepare(f, name) {
+  const doc = f.contentDocument, win = f.contentWindow;
+  const st = doc.createElement("style");
+  st.textContent = "*{caret-color:transparent!important} html{scroll-behavior:auto!important}";
+  doc.head.appendChild(st);
+  win.scrollTo(0, SCROLL[name] || 0);
+  doc.querySelectorAll("[data-snap-scroll]").forEach(el => { el.scrollTop = +el.dataset.snapScroll; });
+}
+
+/* Find the on-screen element whose text starts with `text` (buttons first) */
+function findTarget(doc, text) {
+  const t = text.toLowerCase();
+  const pick = sel => [...doc.querySelectorAll(sel)].filter(el => {
+    const r = el.getBoundingClientRect();
+    return r.width && r.height && el.innerText && el.innerText.trim().toLowerCase().includes(t);
+  });
+  const list = pick("button, a, label, [role=radio], [role=checkbox]");
+  if (list.length) return list.sort((a, b) => a.innerText.length - b.innerText.length)[0];
+  const any = pick("span, p, div");
+  return any.sort((a, b) => a.innerText.length - b.innerText.length)[0] || null;
+}
+
+/* ---- Player state ---- */
+let index = 0, busy = false;
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+function show(i) {
+  index = i;
+  const step = STEPS[i];
+  Object.entries(frames).forEach(([n, f]) => f.classList.toggle("on", n === step.screen));
+  const f = frames[step.screen];
+  const win = f.contentWindow, doc = f.contentDocument;
+  if (!doc) return;
+  // Reset this frame to its captured state (it may be reused by two steps)
+  win.scrollTo({ top: SCROLL[step.screen] || 0, behavior: "instant" });
+  if (step.scroll != null) setTimeout(() => win.scrollTo({ top: step.scroll, behavior: "smooth" }), 250);
+  if (step.type) typeInto(doc, step.type.text);
+}
+
+/* Typing effect for the custom-answer box */
+let typingTimer;
+function typeInto(doc, text) {
+  clearInterval(typingTimer);
+  const input = doc.querySelector('input[type="text"], input:not([type]), textarea');
+  if (!input) return;
+  input.value = ""; input.setAttribute("value", "");
+  let n = 0;
+  typingTimer = setInterval(() => {
+    n++; input.value = text.slice(0, n);
+    if (n >= text.length) clearInterval(typingTimer);
+  }, 45);
+}
+
+/* Ripple on the clicked element, then move on */
+async function tap(step) {
+  const f = frames[step.screen];
+  const el = step.click && f.contentDocument && findTarget(f.contentDocument, step.click);
+  if (!el) return;
+  const r = el.getBoundingClientRect();
+  if (r.bottom < 0 || r.top > innerHeight) return;   // off-screen: skip the ripple
+  const dot = document.createElement("div");
+  dot.className = "tap";
+  dot.style.left = r.left + r.width / 2 + "px";
+  dot.style.top = r.top + r.height / 2 + "px";
+  document.body.appendChild(dot);
+  el.style.transition = "transform .15s"; el.style.transform = "scale(.97)";
+  await sleep(260);
+  el.style.transform = "";
+  setTimeout(() => dot.remove(), 600);
+}
+
+/* Public API used by the deck. Each returns false when it has nowhere to go,
+   so the deck knows to change slides instead. */
+async function next() {
+  if (index >= STEPS.length - 1) return false;
+  if (busy) return true;
+  busy = true;
+  await tap(STEPS[index]);
+  show(index + 1);
+  busy = false;
+  return true;
+}
+function prev() {
+  if (index <= 0) return false;
+  show(index - 1);
+  return true;
+}
+function reset() { clearInterval(typingTimer); show(0); }
+window.DemoPlayer = { next, prev, reset, get step() { return index; }, steps: STEPS.length };
+
+/* Keys pressed while this page itself has focus (e.g. opened on its own).
+   Inside the deck, unhandled keys are passed up to the slideshow. */
+document.addEventListener("keydown", async (e) => {
+  const fwd = ["ArrowRight", "ArrowDown", "PageDown", " "].includes(e.key);
+  const back = ["ArrowLeft", "ArrowUp", "PageUp"].includes(e.key);
+  if (!fwd && !back) return;
+  e.preventDefault();
+  const moved = fwd ? await next() : prev();
+  if (!moved && window.parent !== window && window.parent.Deck) {
+    fwd ? window.parent.Deck.next() : window.parent.Deck.prev();
+  }
+});
+
+/* Show the first screen once it has loaded */
+frames[STEPS[0].screen].addEventListener("load", () => show(0));
+</script>
+</body>
+</html>
